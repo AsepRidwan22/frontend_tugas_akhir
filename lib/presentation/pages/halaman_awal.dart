@@ -3,6 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend_tugas_akhir/presentation/component/custom_btn.dart';
 import 'package:frontend_tugas_akhir/presentation/pages/login_page_new.dart';
 import 'package:frontend_tugas_akhir/theme/theme.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class HalamanAwal extends StatefulWidget {
   const HalamanAwal({super.key});
@@ -77,7 +79,10 @@ class _HalamanAwalState extends State<HalamanAwal> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginPageNew()),
+                  MaterialPageRoute(
+                      builder: (context) => LoginPageNew(
+                            role: 'Pasien',
+                          )),
                 );
               },
             ),
@@ -90,7 +95,10 @@ class _HalamanAwalState extends State<HalamanAwal> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginPageNew()),
+                  MaterialPageRoute(
+                      builder: (context) => LoginPageNew(
+                            role: 'Dokter',
+                          )),
                 );
               },
             ),

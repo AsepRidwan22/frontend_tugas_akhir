@@ -29,18 +29,6 @@ class _RegisterPageNewState extends State<RegisterPageNew> {
 
   @override
   Widget build(BuildContext context) {
-    Color getColor(Set<MaterialState> states) {
-      const Set<MaterialState> interactiveStates = <MaterialState>{
-        MaterialState.pressed,
-        MaterialState.hovered,
-        MaterialState.focused,
-      };
-      if (states.any(interactiveStates.contains)) {
-        return Colors.blue;
-      }
-      return Colors.red;
-    }
-
     Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
       // resizeToAvoidBottomInset: false,
@@ -83,9 +71,6 @@ class _RegisterPageNewState extends State<RegisterPageNew> {
                         email = item;
                       });
                       print(email);
-                      // if (email != null) {
-                      //   print(email);
-                      // }
                     }))),
             _customEditForm(
                 context,
@@ -128,9 +113,6 @@ class _RegisterPageNewState extends State<RegisterPageNew> {
                         password = item;
                       });
                       print(password);
-                      // if (password != null) {
-                      //   print(password);
-                      // }
                     }))),
             _customEditForm(
                 context,

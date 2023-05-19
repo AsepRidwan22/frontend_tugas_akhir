@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend_tugas_akhir/data/datasources/news_remote_data_source.dart';
 import 'package:frontend_tugas_akhir/data/models/news.dart';
 import 'package:frontend_tugas_akhir/presentation/component/custom_news_card.dart';
-import 'package:frontend_tugas_akhir/presentation/provider/news_notifier.dart';
 import 'package:frontend_tugas_akhir/presentation/widgets/news_card_list.dart';
 // import 'package:frontend_tugas_akhir/presentation/component/custom_app_bar.dart';
 // import 'package:frontend_tugas_akhir/presentation/component/custom_btn.dart';
@@ -48,7 +47,7 @@ class _BeritaListState extends State<BeritaList> {
 
   @override
   Widget build(BuildContext context) {
-    initializeDateFormatting('id_ID', 'assets/locale_data/symbols/id_ID.json');
+    // initializeDateFormatting('id_ID', 'assets/locale_data/symbols/id_ID.json');
     Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
       // resizeToAvoidBottomInset: false,
@@ -68,10 +67,10 @@ class _BeritaListState extends State<BeritaList> {
                     img: news[index].urlToImage ?? "",
                     title: news[index].title ?? "Tidak ada judul",
                     writer: news[index].author ?? "Tidak ada penulis",
-                    date: DateFormat("EEEE, d MMMM yyyy", "id_ID").format(
-                        DateTime.parse(snapshot
-                            .data!.articles[index].publishedAt
-                            .toString())),
+                    // date: DateFormat("EEEE, d MMMM yyyy", "id_ID").format(
+                    //     DateTime.parse(snapshot
+                    //         .data!.articles[index].publishedAt
+                    //         .toString())),
                     onTap: () {
                       // To detail News
                       // Navigator.push(

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:frontend_tugas_akhir/data/datasources/user_remote_data_source.dart';
-import 'package:frontend_tugas_akhir/data/models/model_user.dart';
+// import 'package:frontend_tugas_akhir/data/models/model_user.dart';
 import 'package:frontend_tugas_akhir/domain/entities/user.dart';
 import 'package:frontend_tugas_akhir/domain/repositories/user_repository.dart';
 import 'package:frontend_tugas_akhir/common/failure.dart';
@@ -18,6 +18,19 @@ class UserRepositoryImpl implements UserRepository {
       String email, String password) async {
     try {
       final result = await remoteDataSource.loginUsers(email, password);
+      return Right("$result");
+    } on ServerException {
+      return Left(ServerFailure(''));
+    } on SocketException {
+      return Left(ConnectionFailure('Failed to connect to the network'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> loginDokters(
+      String email, String password) async {
+    try {
+      final result = await remoteDataSource.loginDokters(email, password);
       return Right("$result");
     } on ServerException {
       return Left(ServerFailure(''));

@@ -6,11 +6,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 class CustomTextField extends StatefulWidget {
   final Function(String item) onChange;
   final String? Function(String? item)? onChangeIcon;
+  // final String? Function(String? item)? isLoading;
   final String? Function(String? item)? validator;
   final TextEditingController? controller;
   final String? hint;
   final String? label;
   TextInputType? textInputType;
+  String? customAutofillHints;
   int? maxLines;
   final String? icon;
   final String? iconPassword;
@@ -26,6 +28,7 @@ class CustomTextField extends StatefulWidget {
       this.icon,
       this.iconPassword,
       this.textInputType,
+      this.customAutofillHints,
       this.maxLines})
       : super(key: key);
 
@@ -35,12 +38,17 @@ class CustomTextField extends StatefulWidget {
 
 class _CustomTextFieldState extends State<CustomTextField> {
   bool _obscureText = true;
+
+  // get customAutofillHints => null;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       obscureText: widget.iconPassword == null ? false : _obscureText,
       keyboardType: widget.textInputType ?? TextInputType.text,
       controller: widget.controller,
+      autofillHints: widget.customAutofillHints == null
+          ? null
+          : [widget.customAutofillHints!],
       maxLines: widget.maxLines ?? 1,
       style: textStyleBuilder(16, FontWeight.normal)
           .copyWith(color: textSecondary),

@@ -16,7 +16,7 @@ import 'package:frontend_tugas_akhir/domain/usecases/get_news.dart';
 // import 'package:ditonton/domain/usecases/get_movie_detail.dart';
 import 'package:frontend_tugas_akhir/domain/usecases/login.dart';
 import 'package:frontend_tugas_akhir/domain/usecases/register.dart';
-import 'package:frontend_tugas_akhir/presentation/provider/news_notifier.dart';
+import 'package:frontend_tugas_akhir/presentation/provider/dokter_login_notifier.dart';
 
 // import 'package:ditonton/presentation/provider/movie_detail_notifier.dart';
 import 'package:frontend_tugas_akhir/presentation/provider/user_login_notifier.dart';
@@ -32,6 +32,16 @@ void init() {
   locator.registerFactory(
     () => UserLoginNotifier(
       loginUsers: locator(),
+      // role: locator(),
+      // String: locator(),
+    ),
+  );
+
+  locator.registerFactory(
+    () => DokterLoginNotifier(
+      loginDokters: locator(),
+      // role: locator(),
+      // String: locator(),
     ),
   );
 
@@ -54,6 +64,7 @@ void init() {
 
   // use case
   locator.registerLazySingleton(() => LoginUsers(locator()));
+  locator.registerLazySingleton(() => LoginDokters(locator()));
   locator.registerLazySingleton(() => RegisterUsers(locator()));
   locator.registerLazySingleton(() => GetNews(locator()));
 

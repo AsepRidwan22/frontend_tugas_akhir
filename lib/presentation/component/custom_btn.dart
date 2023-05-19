@@ -12,6 +12,7 @@ class CustomIconTextButton extends StatelessWidget {
   double? radiusLeft;
   double? radiusRight;
   double? radiusAll;
+  bool? isLoading;
   final Function() onTap;
   CustomIconTextButton(
       {Key? key,
@@ -24,11 +25,13 @@ class CustomIconTextButton extends StatelessWidget {
       this.radiusLeft,
       this.radiusRight,
       this.radiusAll,
+      this.isLoading,
       required this.onTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    print("isLoading btn component: $isLoading");
     return ElevatedButton.icon(
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
@@ -49,7 +52,7 @@ class CustomIconTextButton extends StatelessWidget {
                           bottomRight: Radius.circular(radiusRight!))),
           minimumSize: Size((width < 300) ? width : width, height ?? 60)),
       label: Text(
-        text,
+        isLoading != true ? text : '',
         style: textStyleBuilder(15, FontWeight.w500)
             .copyWith(color: iconColor ?? bgForm),
         overflow: TextOverflow.ellipsis,
@@ -60,10 +63,18 @@ class CustomIconTextButton extends StatelessWidget {
               icon!,
               color: iconColor ?? bgForm,
             )
-          : Icon(
-              null,
-              size: 0,
-            ),
+          : (isLoading == true)
+              ? const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
+                )
+              : const Icon(
+                  null,
+                  size: 0,
+                ),
     );
   }
 }

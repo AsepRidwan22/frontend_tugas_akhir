@@ -6,7 +6,7 @@ import 'package:frontend_tugas_akhir/presentation/pages/halaman_awal.dart';
 import 'package:frontend_tugas_akhir/presentation/pages/login_page_new.dart';
 import 'package:frontend_tugas_akhir/presentation/pages/register_page_new.dart';
 import 'package:frontend_tugas_akhir/presentation/pages/ringkasan_kesehatan.dart';
-import 'package:frontend_tugas_akhir/presentation/provider/news_notifier.dart';
+import 'package:frontend_tugas_akhir/presentation/provider/dokter_login_notifier.dart';
 import 'package:frontend_tugas_akhir/presentation/provider/user_login_notifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +36,9 @@ class MyApp extends StatelessWidget {
           create: (_) => di.locator<UserLoginNotifier>(),
         ),
         ChangeNotifierProvider(
+          create: (_) => di.locator<DokterLoginNotifier>(),
+        ),
+        ChangeNotifierProvider(
           create: (_) => di.locator<UserRegisterNotifier>(),
         ),
         // ChangeNotifierProvider(
@@ -53,14 +56,22 @@ class MyApp extends StatelessWidget {
         //   scaffoldBackgroundColor: kRichBlack,
         //   textTheme: kTextTheme,
         // ),
-        home: const BeritaList(),
+        home: const HalamanAwal(),
         navigatorObservers: [routeObserver],
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
             case '/halaman_awal':
               return MaterialPageRoute(builder: (_) => HalamanAwal());
-            case '/login':
-              return MaterialPageRoute(builder: (_) => LoginPageNew());
+            case '/pasien/login':
+              return MaterialPageRoute(
+                  builder: (_) => LoginPageNew(
+                        role: 'Pasien',
+                      ));
+            case '/dokter/login':
+              return MaterialPageRoute(
+                  builder: (_) => LoginPageNew(
+                        role: 'Dokter',
+                      ));
             case '/register':
               return MaterialPageRoute(builder: (_) => RegisterPageNew());
             // case PopularMoviesPage.ROUTE_NAME:

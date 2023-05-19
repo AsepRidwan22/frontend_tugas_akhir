@@ -15,6 +15,7 @@ import 'dart:convert';
 
 abstract class UserRemoteDataSource {
   Future<String> loginUsers(String email, String Password);
+  Future<String> loginDokters(String email, String Password);
   Future<String> registerUsers(String email, String name, String Password);
 }
 
@@ -69,6 +70,30 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       return responseData['message'];
     } else {
       throw Exception('Failed to register user');
+    }
+  }
+
+  @override
+  Future<String> loginDokters(String email, String password) async {
+    print("Dokter");
+    print("email datasource : $email");
+    print("password datasource: $password");
+    final response = await client.post(
+      Uri.parse('$BASE_URL/dokter/auth/login'),
+      body: jsonEncode({
+        'email': email,
+        'password': password,
+      }),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      print("login api berhasil");
+      final responseData = jsonDecode(response.body);
+      print("$responseData['access_token']");
+      return responseData['access_token'];
+    } else {
+      throw Exception('Failed to login');
     }
   }
 }

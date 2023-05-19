@@ -76,10 +76,10 @@ class _RingkasanKesehatanState extends State<RingkasanKesehatan> {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                SvgPicture.asset(
-                                  "assets/fat1.svg",
-                                  height: 100.0,
-                                ),
+                                // SvgPicture.asset(
+                                //   "assets/fat1.svg",
+                                //   height: 100.0,
+                                // ),
                               ],
                             ),
                           ),
@@ -103,10 +103,10 @@ class _RingkasanKesehatanState extends State<RingkasanKesehatan> {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                SvgPicture.asset(
-                                  "assets/fat1.svg",
-                                  height: 80.0,
-                                ),
+                                // SvgPicture.asset(
+                                //   "assets/fat1.svg",
+                                //   height: 80.0,
+                                // ),
                               ],
                             ),
                           ),
