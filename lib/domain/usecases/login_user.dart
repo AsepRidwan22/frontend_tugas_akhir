@@ -10,7 +10,7 @@ class LoginUsers {
   LoginUsers(this.repository);
 
   Future<Either<Failure, String>> execute(String email, String password) async {
-    print("masuk ke usecase");
+    // print("masuk ke usecase");
     return repository.loginUsers(email, password);
   }
 }
@@ -21,7 +21,7 @@ class LoginDokters {
   LoginDokters(this.repository);
 
   Future<Either<Failure, String>> execute(String email, String password) async {
-    print("masuk ke usecase");
+    // print("masuk ke usecase");
     return repository.loginDokters(email, password);
   }
 }

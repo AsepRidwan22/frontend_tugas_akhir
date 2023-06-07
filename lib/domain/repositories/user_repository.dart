@@ -8,4 +8,6 @@ abstract class UserRepository {
   Future<Either<Failure, String>> loginDokters(String email, String password);
   Future<Either<Failure, String>> registerUsers(
       String email, String name, String password);
+  Future<bool> setRememberMe(bool value);
+  Future<bool> getRememberMe();
 }

@@ -19,9 +19,9 @@ class NewsRepositoryImpl implements NewsRepository {
     try {
       final result = await remoteDataSource.diabetesNewsId();
     } on ServerException {
-      return Left(ServerFailure(''));
+      return const Left(ServerFailure(''));
     } on SocketException {
-      return Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ConnectionFailure('Failed to connect to the network'));
     }
     throw UnimplementedError();
   }

@@ -18,11 +18,11 @@ class UserRepositoryImpl implements UserRepository {
       String email, String password) async {
     try {
       final result = await remoteDataSource.loginUsers(email, password);
-      return Right("$result");
+      return Right(result);
     } on ServerException {
-      return Left(ServerFailure(''));
+      return const Left(ServerFailure(''));
     } on SocketException {
-      return Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ConnectionFailure('Failed to connect to the network'));
     }
   }
 
@@ -31,11 +31,11 @@ class UserRepositoryImpl implements UserRepository {
       String email, String password) async {
     try {
       final result = await remoteDataSource.loginDokters(email, password);
-      return Right("$result");
+      return Right(result);
     } on ServerException {
-      return Left(ServerFailure(''));
+      return const Left(ServerFailure(''));
     } on SocketException {
-      return Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ConnectionFailure('Failed to connect to the network'));
     }
   }
 
@@ -52,10 +52,10 @@ class UserRepositoryImpl implements UserRepository {
       final result =
           await remoteDataSource.registerUsers(email, name, password);
       return Right(result);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(''));
-    } on SocketException catch (e) {
-      return Left(ConnectionFailure('Failed to connect to the network'));
+    } on ServerException {
+      return const Left(ServerFailure(''));
+    } on SocketException {
+      return const Left(ConnectionFailure('Failed to connect to the network'));
     }
   }
 }

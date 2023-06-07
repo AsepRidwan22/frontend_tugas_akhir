@@ -8,7 +8,7 @@ class User extends Equatable {
   final int? idRole;
   final int? status;
 
-  User({
+  const User({
     required this.name,
     required this.email,
     this.emailVerifiedAt,

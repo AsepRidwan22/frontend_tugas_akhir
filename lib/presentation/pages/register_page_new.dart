@@ -5,7 +5,7 @@ import 'package:frontend_tugas_akhir/presentation/component/custom_app_bar.dart'
 // import 'package:frontend_tugas_akhir/presentation/component/custom_app_bar.dart';
 import 'package:frontend_tugas_akhir/presentation/component/custom_btn.dart';
 import 'package:frontend_tugas_akhir/presentation/component/custom_text_field.dart';
-import 'package:frontend_tugas_akhir/presentation/provider/user_register_notifier.dart';
+import 'package:frontend_tugas_akhir/presentation/provider/pasien_register_notifier.dart';
 import 'package:frontend_tugas_akhir/theme/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -17,9 +17,9 @@ class RegisterPageNew extends StatefulWidget {
 }
 
 class _RegisterPageNewState extends State<RegisterPageNew> {
-  String? email;
-  String? name;
-  String? password;
+  late String? email;
+  late String? name;
+  late String? password;
   // String? username;
   final RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
   final RegExp usernameRegex = RegExp(r'^[a-zA-Z0-9_]{3,20}$');
@@ -32,144 +32,142 @@ class _RegisterPageNewState extends State<RegisterPageNew> {
     Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
       // resizeToAvoidBottomInset: false,
-      body: Container(
-        // constraints: const BoxConstraints(maxWidth: 500),
-        child: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          slivers: <Widget>[
-            CustomAppBar(
-              title: 'Register',
-              widthBar: screenSize.width,
-              leadingIcon: "assets/appBarBack.svg",
-              leadingOnTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            SliverPadding(
-              padding: EdgeInsets.only(top: 30, bottom: 20),
-              sliver: SliverToBoxAdapter(
-                  child: SvgPicture.asset(
-                "assets/Logo.svg",
-                height: 48,
-              )),
-            ),
-            _customEditForm(
-                context,
-                "Email",
-                CustomTextField(
-                    validator: (item) {
-                      if (item!.isEmpty) {
-                        return 'Email tidak boleh kosong';
-                      } else if (!emailRegex.hasMatch(item)) {
-                        return 'Email tidak valid';
-                      }
-                      return null;
-                    },
-                    hint: "Masukan Email",
-                    onChange: ((item) {
-                      setState(() {
-                        email = item;
-                      });
-                      print(email);
-                    }))),
-            _customEditForm(
-                context,
-                "Username",
-                CustomTextField(
-                    hint: "Masukan Username",
-                    validator: (item) {
-                      if (item!.isEmpty) {
-                        return 'Email tidak boleh kosong';
-                      } else if (!usernameRegex.hasMatch(item)) {
-                        return 'Email tidak valid';
-                      }
-                      return null;
-                    },
-                    onChange: ((item) {
-                      setState(() {
-                        name = item;
-                      });
-                      print(name);
-                      // if (name != null) {
-                      //   print(name);
-                      // }
-                    }))),
-            _customEditForm(
-                context,
-                "Password",
-                CustomTextField(
-                    hint: "Masukan Password",
-                    validator: (item) {
-                      if (item!.isEmpty) {
-                        return 'Email tidak boleh kosong';
-                      } else if (!passwordRegex.hasMatch(item)) {
-                        return 'Email tidak valid';
-                      }
-                      return null;
-                    },
-                    iconPassword: "assets/eye-slash.svg",
-                    onChange: ((item) {
-                      setState(() {
-                        password = item;
-                      });
-                      print(password);
-                    }))),
-            _customEditForm(
-                context,
-                "Verifikasi Password",
-                CustomTextField(
-                    hint: "Masukan Verifikasi Password",
-                    validator: (item) {
-                      if (item!.isEmpty) {
-                        return 'Password tidak boleh kosong';
-                      } else if (password != item) {
-                        return 'Password tidak sesuai';
-                      }
-                      return null;
-                    },
-                    iconPassword: "assets/eye-slash.svg",
-                    onChange: ((item) {
-                      if (item != null) {
-                        print(item);
-                      }
-                    }))),
-            SliverPadding(
-              padding: const EdgeInsets.only(left: 20, right: 20, top: 40),
-              sliver: SliverToBoxAdapter(
-                child: CustomIconTextButton(
-                  radiusAll: 15,
-                  bgColor: bgBtnSecondary,
-                  width: screenSize.width,
-                  text: "Daftar",
-                  onTap: () {
-                    if (_formKey.currentState!.validate()) {
-                      print("parameter $email $name $password ");
-                      Provider.of<UserRegisterNotifier>(context, listen: false)
-                          .register(email, name, password);
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
+        slivers: <Widget>[
+          CustomAppBar(
+            title: 'Register',
+            widthBar: screenSize.width,
+            leadingIcon: "assets/appBarBack.svg",
+            leadingOnTap: () {
+              Navigator.pop(context);
+            },
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.only(top: 30, bottom: 20),
+            sliver: SliverToBoxAdapter(
+                child: SvgPicture.asset(
+              "assets/Logo.svg",
+              height: 48,
+            )),
+          ),
+          _customEditForm(
+              context,
+              "Email",
+              CustomTextField(
+                  validator: (item) {
+                    if (item!.isEmpty) {
+                      return 'Email tidak boleh kosong';
+                    } else if (!emailRegex.hasMatch(item)) {
+                      return 'Email tidak valid';
                     }
+                    return null;
                   },
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Consumer<UserRegisterNotifier>(
-                builder: (context, data, child) {
-                  if (data.state == RequestState.Loading) {
-                    return CircularProgressIndicator();
-                  } else if (data.state == RequestState.Success) {
-                    print("berhasil bro");
-                    return Container();
-                  } else {
-                    print("gagal bro");
-                    return Expanded(
-                      child: Container(),
-                    );
+                  hint: "Masukan Email",
+                  onChange: ((item) {
+                    setState(() {
+                      email = item;
+                    });
+                    // print(email);
+                  }))),
+          _customEditForm(
+              context,
+              "Username",
+              CustomTextField(
+                  hint: "Masukan Username",
+                  validator: (item) {
+                    if (item!.isEmpty) {
+                      return 'Email tidak boleh kosong';
+                    } else if (!usernameRegex.hasMatch(item)) {
+                      return 'Email tidak valid';
+                    }
+                    return null;
+                  },
+                  onChange: ((item) {
+                    setState(() {
+                      name = item;
+                    });
+                    // print(name);
+                    // if (name != null) {
+                    //   print(name);
+                    // }
+                  }))),
+          _customEditForm(
+              context,
+              "Password",
+              CustomTextField(
+                  hint: "Masukan Password",
+                  validator: (item) {
+                    if (item!.isEmpty) {
+                      return 'Email tidak boleh kosong';
+                    } else if (!passwordRegex.hasMatch(item)) {
+                      return 'Email tidak valid';
+                    }
+                    return null;
+                  },
+                  iconPassword: "assets/eye-slash.svg",
+                  onChange: ((item) {
+                    setState(() {
+                      password = item;
+                    });
+                    // print(password);
+                  }))),
+          // _customEditForm(
+          //     context,
+          //     "Verifikasi Password",
+          //     CustomTextField(
+          //         hint: "Masukan Verifikasi Password",
+          //         validator: (item) {
+          //           if (item!.isEmpty) {
+          //             return 'Password tidak boleh kosong';
+          //           } else if (password != item) {
+          //             return 'Password tidak sesuai';
+          //           }
+          //           return null;
+          //         },
+          //         iconPassword: "assets/eye-slash.svg",
+          //         onChange: ((item) {
+          //           if (item != null) {
+          //             print(item);
+          //           }
+          //         }))),
+          SliverPadding(
+            padding: const EdgeInsets.only(left: 20, right: 20, top: 40),
+            sliver: SliverToBoxAdapter(
+              child: CustomIconTextButton(
+                radiusAll: 15,
+                bgColor: bSecondaryVariant1,
+                width: screenSize.width,
+                text: "Daftar",
+                onTap: () {
+                  print("parameter $email $name $password ");
+                  if (email != null && name != null && password != null) {}
+                  if (_formKey.currentState!.validate()) {
+                    Provider.of<UserRegisterNotifier>(context, listen: false)
+                        .register(email, name, password);
                   }
                 },
               ),
             ),
-          ],
-        ),
+          ),
+          SliverToBoxAdapter(
+            child: Consumer<UserRegisterNotifier>(
+              builder: (context, data, child) {
+                if (data.state == RequestState.loading) {
+                  return const CircularProgressIndicator();
+                } else if (data.state == RequestState.success) {
+                  print("berhasil bro");
+                  return Container();
+                } else {
+                  print("gagal bro");
+                  return Expanded(
+                    child: Container(),
+                  );
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

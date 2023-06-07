@@ -14,13 +14,13 @@ import 'package:frontend_tugas_akhir/domain/repositories/user_repository.dart';
 import 'package:frontend_tugas_akhir/domain/usecases/get_news.dart';
 
 // import 'package:ditonton/domain/usecases/get_movie_detail.dart';
-import 'package:frontend_tugas_akhir/domain/usecases/login.dart';
+import 'package:frontend_tugas_akhir/domain/usecases/login_user.dart';
 import 'package:frontend_tugas_akhir/domain/usecases/register.dart';
 import 'package:frontend_tugas_akhir/presentation/provider/dokter_login_notifier.dart';
 
 // import 'package:ditonton/presentation/provider/movie_detail_notifier.dart';
-import 'package:frontend_tugas_akhir/presentation/provider/user_login_notifier.dart';
-import 'package:frontend_tugas_akhir/presentation/provider/user_register_notifier.dart';
+import 'package:frontend_tugas_akhir/presentation/provider/pasien_login_notifier.dart';
+import 'package:frontend_tugas_akhir/presentation/provider/pasien_register_notifier.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
@@ -30,7 +30,7 @@ final locator = GetIt.instance;
 void init() {
   // provider
   locator.registerFactory(
-    () => UserLoginNotifier(
+    () => PasienLoginNotifier(
       loginUsers: locator(),
       // role: locator(),
       // String: locator(),

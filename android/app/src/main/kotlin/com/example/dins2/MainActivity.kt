@@ -1,4 +1,4 @@
-package com.example.frontend_tugas_akhir
+package com.example.dins2
 
 import io.flutter.embedding.android.FlutterActivity
 

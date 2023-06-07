@@ -2,11 +2,10 @@ import 'package:frontend_tugas_akhir/common/state_enum.dart';
 import 'package:frontend_tugas_akhir/domain/usecases/login_user.dart';
 import 'package:flutter/foundation.dart';
 
-class DokterLoginNotifier extends ChangeNotifier {
-  final LoginDokters loginDokters;
-  // final String role;
+class PasienLoginNotifier extends ChangeNotifier {
+  final LoginUsers loginUsers;
 
-  DokterLoginNotifier({required this.loginDokters});
+  PasienLoginNotifier({required this.loginUsers});
 
   RequestState _state = RequestState.empty;
   RequestState get state => _state;
@@ -31,20 +30,23 @@ class DokterLoginNotifier extends ChangeNotifier {
   String get message => _message;
 
   Future<void> login(String? email, String? password) async {
-    // print("masuk ke provider");
-    _state = RequestState.loading;
-    notifyListeners();
+    try {
+      _state = RequestState.loading;
+      notifyListeners();
 
-    final result = await loginDokters.execute(email!, password!);
-    result.fold((failure) {
-      // print("masuk ke kondisi loading provider");
-      _message = failure.message;
+      final result = await loginUsers.execute(email!, password!);
+      result.fold((failure) {
+        _message = failure.message;
+        _state = RequestState.error;
+        notifyListeners();
+      }, (user) {
+        _state = RequestState.success;
+        notifyListeners();
+      });
+    } catch (e) {
+      _message = 'An error occurred';
       _state = RequestState.error;
       notifyListeners();
-    }, (failure) {
-      // print("masuk ke kondisi loaded provider");
-      _state = RequestState.success;
-      notifyListeners();
-    });
+    }
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+// import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend_tugas_akhir/theme/theme.dart';
 
 class CustomAppBar extends StatelessWidget {
@@ -21,6 +21,7 @@ class CustomAppBar extends StatelessWidget {
       automaticallyImplyLeading: true,
       pinned: true,
       toolbarHeight: 60,
+      backgroundColor: bPrimary,
       // leadingWidth: widthBar,
       flexibleSpace: FlexibleSpaceBar(
         background: Stack(
@@ -31,7 +32,7 @@ class CustomAppBar extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
-                    colors: <Color>[primary, gradation],
+                    colors: <Color>[bPrimary, bPrimary],
                     stops: [0.447, 1.0],
                   ),
                 ),

@@ -29,6 +29,8 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  flutter_localizations:
+    sdk: flutter
   flutter:
     sdk: flutter
 
@@ -41,13 +43,15 @@ dependencies:
   google_fonts: ^4.0.3
   provider: ^6.0.5
   get_it: ^7.2.0
-  flutter_svg: ^1.1.6
+  flutter_svg: ^2.0.5
   dio: ^5.1.2
   cached_network_image: ^3.2.3
   bloc: ^8.1.1
   flutter_bloc: ^8.1.2
   loading_animation_widget: ^1.2.0+4
-  intl: ^0.18.1
+  intl: ^0.17.0
+  logger: ^1.3.0
+  image_picker: ^0.8.7+5
 
 dev_dependencies:
   flutter_test:
@@ -84,6 +88,10 @@ flutter:
     - assets/email.svg
     - assets/password.svg
     - assets/eye-slash.svg
+    - assets/Gemuk1.svg
+    - assets/ringanIcon.svg
+    - assets/sedangIcon.svg
+    - assets/beratIcon.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

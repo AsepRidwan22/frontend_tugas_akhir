@@ -31,15 +31,15 @@ class CustomIconTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("isLoading btn component: $isLoading");
+    // print("isLoading btn component: $isLoading");
     return ElevatedButton.icon(
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
           side: BorderSide(
             width: 1.0,
-            color: primary,
+            color: bgColor ?? bPrimary,
           ),
-          backgroundColor: bgColor ?? primary,
+          backgroundColor: bgColor ?? bPrimary,
           shape: RoundedRectangleBorder(
               borderRadius: radiusAll != null
                   ? BorderRadius.circular(radiusAll!)
@@ -53,15 +53,14 @@ class CustomIconTextButton extends StatelessWidget {
           minimumSize: Size((width < 300) ? width : width, height ?? 60)),
       label: Text(
         isLoading != true ? text : '',
-        style: textStyleBuilder(15, FontWeight.w500)
-            .copyWith(color: iconColor ?? bgForm),
+        style: bButton1.copyWith(color: iconColor ?? bgForm),
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
       ),
       icon: icon != null
           ? SvgPicture.asset(
               icon!,
-              color: iconColor ?? bgForm,
+              // color: iconColor ?? bgForm,
             )
           : (isLoading == true)
               ? const SizedBox(

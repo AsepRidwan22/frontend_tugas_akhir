@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend_tugas_akhir/common/state_enum.dart';
 import 'package:frontend_tugas_akhir/presentation/component/custom_app_bar.dart';
 import 'package:frontend_tugas_akhir/presentation/component/custom_btn.dart';
 import 'package:frontend_tugas_akhir/presentation/component/custom_text_field.dart';
 import 'package:frontend_tugas_akhir/presentation/pages/register_page_new.dart';
 import 'package:frontend_tugas_akhir/presentation/pages/ringkasan_kesehatan.dart';
 import 'package:frontend_tugas_akhir/presentation/provider/dokter_login_notifier.dart';
+import 'package:frontend_tugas_akhir/presentation/provider/pasien_login_notifier.dart';
 import 'package:frontend_tugas_akhir/theme/theme.dart';
 import 'package:provider/provider.dart';
-import 'package:frontend_tugas_akhir/presentation/provider/user_login_notifier.dart';
-import 'package:frontend_tugas_akhir/common/state_enum.dart';
 
 class LoginPageNew extends StatefulWidget {
   final String role;
@@ -23,37 +22,31 @@ class LoginPageNew extends StatefulWidget {
 }
 
 class _LoginPageNewState extends State<LoginPageNew> {
-  String? email;
-  String? password;
-  bool isChecked = false;
-  final RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-  final RegExp passwordRegex =
-      RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$');
+  late TextEditingController _emailController;
+  late TextEditingController _passwordController;
   final _formKey = GlobalKey<FormState>();
-  bool _isObscured = true;
-  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    Color getColor(Set<MaterialState> states) {
-      const Set<MaterialState> interactiveStates = <MaterialState>{
-        MaterialState.pressed,
-        MaterialState.hovered,
-        MaterialState.focused,
-      };
-      if (states.any(interactiveStates.contains)) {
-        return Colors.blue;
-      }
-      return Colors.red;
-    }
-
     Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
       body: Form(
         key: _formKey,
         child: CustomScrollView(
-          // physics: const BouncingScrollPhysics(),
           slivers: <Widget>[
             CustomAppBar(
               title: 'Login ${widget.role}',
@@ -64,195 +57,139 @@ class _LoginPageNewState extends State<LoginPageNew> {
               },
             ),
             SliverPadding(
-              padding: const EdgeInsets.only(top: 60, bottom: 50),
+              padding: const EdgeInsets.only(left: 20, top: 80, bottom: 5),
               sliver: SliverToBoxAdapter(
-                  child: SvgPicture.asset(
-                "assets/Logo.svg",
-                height: 48,
-              )),
+                child: Text(
+                  "Masuk",
+                  style: bHeading4.copyWith(color: bPrimary),
+                ),
+              ),
             ),
             _customEditForm(
-                context,
-                "Email",
-                CustomTextField(
-                    hint: "Masukan Email",
-                    icon: "assets/email.svg",
-                    customAutofillHints: AutofillHints.email,
-                    validator: (item) {
-                      if (item!.isEmpty) {
-                        return 'Email tidak boleh kosong';
-                      } else if (!emailRegex.hasMatch(item)) {
-                        return 'Email tidak valid';
-                      }
-                      return null;
-                    },
-                    onChange: ((item) {
-                      setState(() {
-                        email = item;
-                      });
-                    }))),
+              context,
+              "Email",
+              CustomTextField(
+                controller: _emailController,
+                hint: "Masukkan Email",
+                icon: "assets/email.svg",
+                customAutofillHints: AutofillHints.email,
+                validator: (item) {
+                  if (item!.isEmpty) {
+                    return 'Email tidak boleh kosong';
+                  }
+                  return null;
+                },
+              ),
+            ),
             _customEditForm(
-                context,
-                "Password",
-                CustomTextField(
-                    hint: "Masukan Password",
-                    icon: "assets/password.svg",
-                    iconPassword: "assets/eye-slash.svg",
-                    validator: (item) {
-                      if (item!.isEmpty) {
-                        return 'Password tidak boleh kosong';
-                      }
-                      return null;
-                    },
-                    onChangeIcon: ((item) {
-                      setState(() {
-                        _isObscured = !_isObscured;
-                      });
-                      return null;
-                    }),
-                    onChange: ((item) {
-                      setState(() {
-                        password = item;
-                      });
-                    }))),
+              context,
+              "Password",
+              CustomTextField(
+                controller: _passwordController,
+                hint: "Masukkan Password",
+                icon: "assets/password.svg",
+                iconPassword: "assets/eye-slash.svg",
+                customAutofillHints: AutofillHints.password,
+                validator: (item) {
+                  if (item!.isEmpty) {
+                    return 'Password tidak boleh kosong';
+                  }
+                  return null;
+                },
+              ),
+            ),
             SliverPadding(
-              padding: const EdgeInsets.only(left: 20, top: 20, bottom: 20),
+              padding: const EdgeInsets.only(left: 10, right: 20),
               sliver: SliverToBoxAdapter(
                 child: Row(
-                  children: [
-                    Checkbox(
-                      checkColor: Colors.white,
-                      fillColor: MaterialStateProperty.resolveWith(getColor),
-                      value: isChecked,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          isChecked = value!;
-                        });
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Consumer<PasienLoginNotifier>(
+                      builder: (context, loginNotifier, _) {
+                        return Row(
+                          children: <Widget>[
+                            Checkbox(
+                              value: loginNotifier.rememberMe,
+                              onChanged: (value) {
+                                loginNotifier.rememberMe = value!;
+                              },
+                              activeColor: bPrimary,
+                            ),
+                            Text(
+                              "Ingat Saya",
+                              style: bSubtitle2.copyWith(color: bDarkGrey),
+                            ),
+                          ],
+                        );
                       },
                     ),
-                    const Text(
-                      "Ingat Saya",
-                      style: TextStyle(fontSize: 12),
-                    )
+                    TextButton(
+                      onPressed: () {
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => const RegisterPageNew(),
+                        //   ),
+                        // );
+                      },
+                      child: Text(
+                        "Lupa Password?",
+                        style: bSubtitle2.copyWith(color: bPrimary),
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
-            (widget.role == "Pasien")
-                ? SliverPadding(
-                    padding: const EdgeInsets.only(left: 20, right: 20),
-                    sliver: SliverToBoxAdapter(
-                      child: Consumer<UserLoginNotifier>(
-                          builder: (context, data, child) {
-                        return CustomIconTextButton(
-                          radiusAll: 15,
-                          bgColor: bgBtnSecondary,
-                          width: screenSize.width,
-                          text: "Masuk",
-                          isLoading: _isLoading,
-                          onTap: () {
-                            if (_formKey.currentState!.validate()) {
-                              Provider.of<UserLoginNotifier>(context,
-                                      listen: false)
-                                  .login(email, password);
-                            }
-
-                            if (data.state == RequestState.Loading) {
-                              setState(() {
-                                _isLoading = !_isLoading;
-                              });
-                            }
+            SliverPadding(
+              padding: const EdgeInsets.only(top: 30, right: 20, left: 20),
+              sliver: SliverToBoxAdapter(
+                child: Center(
+                  child: widget.role == "Pasien"
+                      ? Consumer<PasienLoginNotifier>(
+                          builder: (context, pasienLoginNotifier, _) {
+                            return CustomIconTextButton(
+                              radiusAll: 15,
+                              bgColor: bPrimary,
+                              width: screenSize.width,
+                              text: "Masuk",
+                              isLoading: pasienLoginNotifier.isLoading,
+                              onTap: () => _loginPasien(pasienLoginNotifier),
+                            );
                           },
-                        );
-                      }),
-                    ),
-                  )
-                : SliverPadding(
-                    padding: const EdgeInsets.only(left: 20, right: 20),
-                    sliver: SliverToBoxAdapter(
-                      child: Consumer<DokterLoginNotifier>(
-                          builder: (context, data, child) {
-                        return CustomIconTextButton(
-                          radiusAll: 15,
-                          bgColor: bgBtnSecondary,
-                          width: screenSize.width,
-                          text: "Masuk",
-                          isLoading: _isLoading,
-                          onTap: () {
-                            if (_formKey.currentState!.validate()) {
-                              Provider.of<DokterLoginNotifier>(context,
-                                      listen: false)
-                                  .login(email, password);
-                            }
-
-                            if (data.state == RequestState.Loading) {
-                              setState(() {
-                                _isLoading = !_isLoading;
-                              });
-                            }
+                        )
+                      : Consumer<DokterLoginNotifier>(
+                          builder: (context, dokterLoginNotifier, _) {
+                            return CustomIconTextButton(
+                              radiusAll: 15,
+                              bgColor: bPrimary,
+                              width: screenSize.width,
+                              text: "Masuk",
+                              isLoading: dokterLoginNotifier.isLoading,
+                              onTap: () => _loginDokter(dokterLoginNotifier),
+                            );
                           },
-                        );
-                      }),
-                    ),
-                  ),
+                        ),
+                ),
+              ),
+            ),
             SliverPadding(
               padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
               sliver: SliverToBoxAdapter(
                 child: CustomIconTextButton(
                   radiusAll: 15,
-                  bgColor: bgBtnSecondary,
+                  bgColor: bSecondary,
                   width: screenSize.width,
                   text: "Daftar",
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const RegisterPageNew()),
+                        builder: (context) => const RegisterPageNew(),
+                      ),
                     );
                   },
                 ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Consumer<UserLoginNotifier>(
-                builder: (context, data, child) {
-                  if (data.state == RequestState.Success) {
-                    // Navigator.pushReplacementNamed(context, '/register');
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const RingkasanKesehatan()),
-                      );
-                    });
-                    return Container();
-                  } else {
-                    return Expanded(
-                      child: Container(),
-                    );
-                  }
-                },
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Consumer<DokterLoginNotifier>(
-                builder: (context, data, child) {
-                  if (data.state == RequestState.Success) {
-                    // Navigator.pushReplacementNamed(context, '/register');
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const RingkasanKesehatan()),
-                      );
-                    });
-                    return Container();
-                  } else {
-                    return Expanded(
-                      child: Container(),
-                    );
-                  }
-                },
               ),
             ),
           ],
@@ -260,31 +197,89 @@ class _LoginPageNewState extends State<LoginPageNew> {
       ),
     );
   }
-}
 
-Widget _customEditForm(
-    BuildContext context, String pleaceHolder, Widget textField) {
-  return SliverPadding(
-    padding: const EdgeInsets.only(
-      top: 10.0,
-      left: 20.0,
-      right: 20.0,
-    ),
-    sliver: SliverToBoxAdapter(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            pleaceHolder,
-            style: textStyleBuilder(15, FontWeight.w500)
-                .copyWith(color: labelForm),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 5.0),
-            child: textField,
-          ),
-        ],
+  void _loginPasien(PasienLoginNotifier loginNotifier) async {
+    if (_formKey.currentState!.validate()) {
+      loginNotifier.isLoading = true;
+
+      try {
+        await loginNotifier.login(
+          _emailController.text,
+          _passwordController.text,
+        );
+
+        if (loginNotifier.state == RequestState.success) {
+          _navigateToNextPage();
+        } else {
+          _showErrorSnackBar('Login gagal. Silakan coba lagi.');
+        }
+      } catch (error) {
+        _showErrorSnackBar('Terjadi kesalahan. Silakan coba lagi.');
+      }
+
+      loginNotifier.isLoading = false;
+    }
+  }
+
+  void _loginDokter(DokterLoginNotifier loginNotifier) async {
+    if (_formKey.currentState!.validate()) {
+      loginNotifier.isLoading = true;
+
+      try {
+        await loginNotifier.login(
+          _emailController.text,
+          _passwordController.text,
+        );
+
+        if (loginNotifier.state == RequestState.success) {
+          _navigateToNextPage();
+        } else {
+          _showErrorSnackBar('Login gagal. Silakan coba lagi.');
+        }
+      } catch (error) {
+        _showErrorSnackBar('Terjadi kesalahan. Silakan coba lagi.');
+      }
+
+      loginNotifier.isLoading = false;
+    }
+  }
+
+  void _navigateToNextPage() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const RingkasanKesehatan(),
       ),
-    ),
-  );
+    );
+  }
+
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
+  Widget _customEditForm(BuildContext context, String title, Widget child) {
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      sliver: SliverToBoxAdapter(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Text(
+                title,
+                style: bHeading6.copyWith(color: bTextSecondary),
+              ),
+            ),
+            child,
+          ],
+        ),
+      ),
+    );
+  }
 }
