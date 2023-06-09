@@ -534,7 +534,7 @@ Widget _customAppBar(String label, String iconBar) {
           InkWell(
             onTap: () {},
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(10.0),
               child: SvgPicture.asset(
                 "assets/notifikasi.svg",
                 // color: Colors.black,
