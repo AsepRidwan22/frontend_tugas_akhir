@@ -193,7 +193,7 @@ class _LoginPageNewState extends State<LoginPageNew> {
                                   },
                                 )
                               : CustomIconTextButton(
-                                  radiusAll: 15,
+                                  radiusAll: 10,
                                   bgColor: bPrimary,
                                   width: screenSize.width,
                                   text: "Masuk",

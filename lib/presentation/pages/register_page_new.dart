@@ -132,7 +132,7 @@ class _RegisterPageNewState extends State<RegisterPageNew> {
           //           }
           //         }))),
           SliverPadding(
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 40),
+            padding: const EdgeInsets.only(left: 25, right: 20, top: 40),
             sliver: SliverToBoxAdapter(
               child: CustomIconTextButton(
                 radiusAll: 15,
