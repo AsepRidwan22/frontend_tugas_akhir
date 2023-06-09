@@ -6,14 +6,16 @@ class LoginPasienState extends Equatable {
   final String message;
   final bool rememberMe;
   final bool isLoading;
-  // final FromStatusEnum fromStatus;
+  final FormStatusEnum formStatus;
+  final bool obsecurePassword;
   const LoginPasienState({
     required this.email,
     required this.password,
     required this.message,
     required this.rememberMe,
     required this.isLoading,
-    // required this.fromStatus,
+    required this.formStatus,
+    required this.obsecurePassword,
   });
 
   LoginPasienState copyWith({
@@ -22,7 +24,8 @@ class LoginPasienState extends Equatable {
     String? message,
     bool? rememberMe,
     bool? isLoading,
-    // FromStatusEnum? fromStatus,
+    FormStatusEnum? formStatus,
+    bool? obsecurePassword,
   }) {
     return LoginPasienState(
       email: email ?? this.email,
@@ -30,7 +33,8 @@ class LoginPasienState extends Equatable {
       message: message ?? this.message,
       rememberMe: rememberMe ?? this.rememberMe,
       isLoading: isLoading ?? this.isLoading,
-      // fromStatus: fromStatus ?? this.fromStatus,
+      formStatus: formStatus ?? this.formStatus,
+      obsecurePassword: obsecurePassword ?? this.obsecurePassword,
     );
   }
 
@@ -41,7 +45,8 @@ class LoginPasienState extends Equatable {
         message,
         rememberMe,
         isLoading,
-        // fromStatus,
+        formStatus,
+        obsecurePassword,
       ];
 }
 
@@ -51,15 +56,17 @@ class LoginPasienInitial extends LoginPasienState {
   static String messageInitial = '';
   static bool rememberMeInitial = false;
   static bool isLoadingInitial = false;
-  // static FromStatusEnum fromStatusInitial = FromStatusEnum.login;
+  static FormStatusEnum formStatusInitial = FormStatusEnum.initForm;
+  static bool obsecurePasswordInitial = true;
 
-  const LoginPasienInitial()
+  LoginPasienInitial()
       : super(
-          email: '',
-          password: '',
-          message: '',
-          rememberMe: false,
-          isLoading: false,
-          // fromStatus: FromStatusEnum.login,
+          email: emailInitial,
+          password: passwordInitial,
+          message: messageInitial,
+          rememberMe: rememberMeInitial,
+          isLoading: isLoadingInitial,
+          formStatus: FormStatusEnum.initForm,
+          obsecurePassword: obsecurePasswordInitial,
         );
 }

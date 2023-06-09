@@ -29,27 +29,29 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   @override
   Future<String> loginUsers(String email, String password) async {
     // print(baseURL);
-    try {
-      final response = await client.post(
-        Uri.parse('$baseURL/pasien/auth/login'),
-        body: jsonEncode({
-          'email': email,
-          'password': password,
-        }),
-        headers: {'Content-Type': 'application/json'},
-      );
 
-      if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.body);
-        return responseData['access_token'];
-      } else {
-        final errorResponse = jsonDecode(response.body);
-        final errorMessage = errorResponse['message'] ?? 'Failed to login';
-        throw Exception(errorMessage);
-      }
-    } catch (e) {
-      throw Exception('An error occurred while logging in: $e');
+    // try {
+    final response = await client.post(
+      Uri.parse('$baseURL/pasien/auth/login'),
+      body: jsonEncode({
+        'email': email,
+        'password': password,
+      }),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      return responseData['access_token'];
+    } else {
+      final errorResponse = jsonDecode(response.body);
+      final errorMessage = errorResponse['message'] ?? 'Failed to login';
+      throw Exception(errorMessage);
     }
+    // }
+    // catch (e) {
+    //   throw Exception('An error occurred while logging in: $e');
+    // }
   }
 
   @override

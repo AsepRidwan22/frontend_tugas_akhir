@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:frontend_tugas_akhir/common/state_enum.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend_tugas_akhir/common/failure.dart';
+// import 'package:frontend_tugas_akhir/common/state_enum.dart';
+import 'package:frontend_tugas_akhir/presentation/bloc/LoginPasien/login_pasien_bloc.dart';
 import 'package:frontend_tugas_akhir/presentation/component/custom_app_bar.dart';
 import 'package:frontend_tugas_akhir/presentation/component/custom_btn.dart';
-import 'package:frontend_tugas_akhir/presentation/component/custom_text_field.dart';
+import 'package:frontend_tugas_akhir/presentation/component/custom_login_email_text_field.dart';
+import 'package:frontend_tugas_akhir/presentation/component/custom_login_password_text_field.dart';
+// import 'package:frontend_tugas_akhir/presentation/component/custom_text_field.dart';
+import 'package:frontend_tugas_akhir/presentation/component/custom_toast.dart';
 import 'package:frontend_tugas_akhir/presentation/pages/register_page_new.dart';
 import 'package:frontend_tugas_akhir/presentation/pages/ringkasan_kesehatan.dart';
-import 'package:frontend_tugas_akhir/presentation/provider/dokter_login_notifier.dart';
-import 'package:frontend_tugas_akhir/presentation/provider/pasien_login_notifier.dart';
+// import 'package:frontend_tugas_akhir/presentation/provider/dokter_login_notifier.dart';
+// import 'package:frontend_tugas_akhir/presentation/provider/pasien_login_notifier.dart';
 import 'package:frontend_tugas_akhir/theme/theme.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../common/form_enum.dart';
 
 class LoginPageNew extends StatefulWidget {
   final String role;
@@ -22,245 +32,232 @@ class LoginPageNew extends StatefulWidget {
 }
 
 class _LoginPageNewState extends State<LoginPageNew> {
-  late TextEditingController _emailController;
-  late TextEditingController _passwordController;
   final _formKey = GlobalKey<FormState>();
+  final toast = FToast();
 
   @override
   void initState() {
     super.initState();
-    _emailController = TextEditingController();
-    _passwordController = TextEditingController();
+    toast.init(context);
   }
 
   @override
   void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
     super.dispose();
+  }
+
+  void toastError(String message) => toast.showToast(
+      child: CustomToast(
+        logo: "assets/exclamation-circle.svg",
+        message: message,
+        toastColor: bToastFiled,
+        bgToastColor: bBgToastFiled,
+        borderToastColor: bBorderToastFiled,
+      ),
+      gravity: ToastGravity.TOP,
+      toastDuration: const Duration(seconds: 3));
+
+  void toastSuccess(String message) {
+    toast.showToast(
+        child: CustomToast(
+          logo: "assets/check-circle.svg",
+          message: message,
+          toastColor: bToastSuccess,
+          bgToastColor: bBgToastSuccess,
+          borderToastColor: bBorderToastSuccess,
+        ),
+        gravity: ToastGravity.TOP,
+        toastDuration: const Duration(seconds: 3));
   }
 
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
-      body: Form(
-        key: _formKey,
-        child: CustomScrollView(
-          slivers: <Widget>[
-            CustomAppBar(
-              title: 'Login ${widget.role}',
-              widthBar: screenSize.width,
-              leadingIcon: "assets/appBarBack.svg",
-              leadingOnTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.only(left: 20, top: 80, bottom: 5),
-              sliver: SliverToBoxAdapter(
-                child: Text(
-                  "Masuk",
-                  style: bHeading4.copyWith(color: bPrimary),
+      body: BlocListener<LoginPasienBloc, LoginPasienState>(
+        listenWhen: (previous, current) {
+          if (previous.formStatus == FormStatusEnum.submittingForm) {
+            return true;
+          } else {
+            return false;
+          }
+        },
+        listener: (context, state) {
+          if (state.formStatus == FormStatusEnum.failedSubmission) {
+            // _showSnackBar(state.message, Colors.red);
+            // if (state.message is ServerFailure) {
+            //   toastError(state.message);
+            // }
+            toastError(state.message);
+          } else if (state.formStatus == FormStatusEnum.successSubmission) {
+            Future(() {
+              // _showSnackBar(state.message, Colors.green);
+              toastSuccess(state.message);
+              // print('sukses login');
+            }).then((value) {
+              // context.read<DashboardBloc>().add(const IsLogInSave(value: true));
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const RingkasanKesehatan(),
+                ),
+              );
+            });
+          }
+        },
+        child: Form(
+          key: _formKey,
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SvgPicture.asset(
+                    "assets/backgroundawal.svg", // Ganti dengan path file SVG latar belakang yang Anda miliki
+                    fit: BoxFit.cover,
+                    width: screenSize.width * 1.5,
+                  ),
                 ),
               ),
-            ),
-            _customEditForm(
-              context,
-              "Email",
-              CustomTextField(
-                controller: _emailController,
-                hint: "Masukkan Email",
-                icon: "assets/email.svg",
-                customAutofillHints: AutofillHints.email,
-                validator: (item) {
-                  if (item!.isEmpty) {
-                    return 'Email tidak boleh kosong';
-                  }
-                  return null;
-                },
-              ),
-            ),
-            _customEditForm(
-              context,
-              "Password",
-              CustomTextField(
-                controller: _passwordController,
-                hint: "Masukkan Password",
-                icon: "assets/password.svg",
-                iconPassword: "assets/eye-slash.svg",
-                customAutofillHints: AutofillHints.password,
-                validator: (item) {
-                  if (item!.isEmpty) {
-                    return 'Password tidak boleh kosong';
-                  }
-                  return null;
-                },
-              ),
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.only(left: 10, right: 20),
-              sliver: SliverToBoxAdapter(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Consumer<PasienLoginNotifier>(
-                      builder: (context, loginNotifier, _) {
-                        return Row(
-                          children: <Widget>[
-                            Checkbox(
-                              value: loginNotifier.rememberMe,
-                              onChanged: (value) {
-                                loginNotifier.rememberMe = value!;
-                              },
-                              activeColor: bPrimary,
-                            ),
-                            Text(
-                              "Ingat Saya",
-                              style: bSubtitle2.copyWith(color: bDarkGrey),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => const RegisterPageNew(),
-                        //   ),
-                        // );
-                      },
+              CustomScrollView(
+                slivers: <Widget>[
+                  CustomAppBar(
+                    title: 'Login ${widget.role}',
+                    widthBar: screenSize.width,
+                    leadingIcon: "assets/appBarBack.svg",
+                    leadingOnTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  SliverPadding(
+                    padding:
+                        const EdgeInsets.only(left: 20, top: 80, bottom: 5),
+                    sliver: SliverToBoxAdapter(
                       child: Text(
-                        "Lupa Password?",
-                        style: bSubtitle2.copyWith(color: bPrimary),
+                        "Masuk",
+                        style: bHeading4.copyWith(color: bPrimary),
                       ),
                     ),
-                  ],
-                ),
-              ),
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.only(top: 30, right: 20, left: 20),
-              sliver: SliverToBoxAdapter(
-                child: Center(
-                  child: widget.role == "Pasien"
-                      ? Consumer<PasienLoginNotifier>(
-                          builder: (context, pasienLoginNotifier, _) {
-                            return CustomIconTextButton(
-                              radiusAll: 15,
-                              bgColor: bPrimary,
-                              width: screenSize.width,
-                              text: "Masuk",
-                              isLoading: pasienLoginNotifier.isLoading,
-                              onTap: () => _loginPasien(pasienLoginNotifier),
-                            );
-                          },
-                        )
-                      : Consumer<DokterLoginNotifier>(
-                          builder: (context, dokterLoginNotifier, _) {
-                            return CustomIconTextButton(
-                              radiusAll: 15,
-                              bgColor: bPrimary,
-                              width: screenSize.width,
-                              text: "Masuk",
-                              isLoading: dokterLoginNotifier.isLoading,
-                              onTap: () => _loginDokter(dokterLoginNotifier),
-                            );
-                          },
-                        ),
-                ),
-              ),
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-              sliver: SliverToBoxAdapter(
-                child: CustomIconTextButton(
-                  radiusAll: 15,
-                  bgColor: bSecondary,
-                  width: screenSize.width,
-                  text: "Daftar",
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const RegisterPageNew(),
+                  ),
+                  _customEditForm(
+                      context, "Email", const CustomLoginUsernameTextField()),
+                  _customEditForm(context, "Password",
+                      const CustomLoginPasswordTextField()),
+                  SliverPadding(
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    sliver: SliverToBoxAdapter(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          _buildCheckBox(),
+                          TextButton(
+                            onPressed: () {
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) => const RegisterPageNew(),
+                              //   ),
+                              // );
+                            },
+                            child: Text(
+                              "Lupa Password?",
+                              style: bSubtitle2.copyWith(color: bPrimary),
+                            ),
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                  SliverPadding(
+                    padding:
+                        const EdgeInsets.only(top: 30, right: 20, left: 20),
+                    sliver: SliverToBoxAdapter(
+                      child: Center(
+                          child: widget.role == "Pasien"
+                              ? CustomIconTextButton(
+                                  radiusAll: 15,
+                                  bgColor: bPrimary,
+                                  width: screenSize.width,
+                                  text: "Masuk",
+                                  // isLoading: pasienLoginNotifier.isLoading,
+                                  // onTap: () => _loginPasien(pasienLoginNotifier),
+                                  onTap: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      context
+                                          .read<LoginPasienBloc>()
+                                          .add(const OnEmailSignIn());
+                                      // });
+                                    } else {
+                                      toastError('Lengkapi data anda');
+                                    }
+                                  },
+                                )
+                              : CustomIconTextButton(
+                                  radiusAll: 15,
+                                  bgColor: bPrimary,
+                                  width: screenSize.width,
+                                  text: "Masuk",
+                                  // isLoading: pasienLoginNotifier.isLoading,
+                                  // onTap: () => _loginPasien(pasienLoginNotifier),
+                                  onTap: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      context
+                                          .read<LoginPasienBloc>()
+                                          .add(const OnEmailSignIn());
+                                      // try {
+                                      //   context
+                                      //       .read<LoginPasienBloc>()
+                                      //       .add(const OnEmailSignIn());
+                                      // } catch (e) {
+                                      //   context.read<LoginPasienBloc>().add(
+                                      //       LoginFailure(
+                                      //           errorMessage: e.toString()));
+                                      // }
+                                    } else {
+                                      // Text wait localization
+                                      // toastError(AppLocalizations.of(context)!.complateYourData);
+                                    }
+                                  },
+                                )),
+                    ),
+                  ),
+                  SliverPadding(
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 20, top: 20),
+                    sliver: SliverToBoxAdapter(
+                      child: CustomIconTextButton(
+                        radiusAll: 15,
+                        bgColor: bSecondary,
+                        width: screenSize.width,
+                        text: "Daftar",
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const RegisterPageNew(),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  void _loginPasien(PasienLoginNotifier loginNotifier) async {
-    if (_formKey.currentState!.validate()) {
-      loginNotifier.isLoading = true;
-
-      try {
-        await loginNotifier.login(
-          _emailController.text,
-          _passwordController.text,
-        );
-
-        if (loginNotifier.state == RequestState.success) {
-          _navigateToNextPage();
-        } else {
-          _showErrorSnackBar('Login gagal. Silakan coba lagi.');
-        }
-      } catch (error) {
-        _showErrorSnackBar('Terjadi kesalahan. Silakan coba lagi.');
-      }
-
-      loginNotifier.isLoading = false;
-    }
-  }
-
-  void _loginDokter(DokterLoginNotifier loginNotifier) async {
-    if (_formKey.currentState!.validate()) {
-      loginNotifier.isLoading = true;
-
-      try {
-        await loginNotifier.login(
-          _emailController.text,
-          _passwordController.text,
-        );
-
-        if (loginNotifier.state == RequestState.success) {
-          _navigateToNextPage();
-        } else {
-          _showErrorSnackBar('Login gagal. Silakan coba lagi.');
-        }
-      } catch (error) {
-        _showErrorSnackBar('Terjadi kesalahan. Silakan coba lagi.');
-      }
-
-      loginNotifier.isLoading = false;
-    }
-  }
-
-  void _navigateToNextPage() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const RingkasanKesehatan(),
-      ),
-    );
-  }
-
-  void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-      ),
-    );
-  }
+  // void _showSnackBar(String message, Color color) {
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     SnackBar(
+  //       content: Text(message),
+  //       backgroundColor: color,
+  //     ),
+  //   );
+  // }
 
   Widget _customEditForm(BuildContext context, String title, Widget child) {
     return SliverPadding(
@@ -280,6 +277,46 @@ class _LoginPageNewState extends State<LoginPageNew> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildCheckBox() {
+    return BlocBuilder<LoginPasienBloc, LoginPasienState>(
+      builder: (context, state) {
+        return GestureDetector(
+          onTap: () => context.read<LoginPasienBloc>().add(
+                LoginPasienRememberMeChanged(
+                  rememberMe: !state.rememberMe,
+                ),
+              ),
+          child: Row(
+            children: <Widget>[
+              SizedBox(
+                height: 24.0,
+                width: 24.0,
+                child: Checkbox(
+                  value: state.rememberMe,
+                  onChanged: (value) => context.read<LoginPasienBloc>().add(
+                        LoginPasienRememberMeChanged(
+                          rememberMe: value!,
+                        ),
+                      ),
+                ),
+              ),
+              const SizedBox(
+                width: 10.0,
+              ),
+              // Text wait localization
+              Text(
+                'ingat saya',
+                style: bBody1.copyWith(
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

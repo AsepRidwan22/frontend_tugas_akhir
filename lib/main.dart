@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 // import 'package:frontend_tugas_akhir/common/constants.dart';
 import 'package:frontend_tugas_akhir/common/utils.dart';
+import 'package:frontend_tugas_akhir/presentation/bloc/LoginPasien/login_pasien_bloc.dart';
 import 'package:frontend_tugas_akhir/presentation/bloc/News/news_bloc.dart';
 // import 'package:frontend_tugas_akhir/presentation/pages/berita_list.dart';
 // import 'package:frontend_tugas_akhir/presentation/pages/form_kesehatan_awal.dart';
@@ -46,11 +47,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => di.locator<UserRegisterNotifier>(),
         ),
-        // ChangeNotifierProvider(
-        //   create: (_) => di.locator<NewsNotifier>(),
-        // ),
         BlocProvider(
           create: (_) => di.locator<NewsListBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => di.locator<LoginPasienBloc>(),
         ),
       ],
       child: AnnotatedRegion<SystemUiOverlayStyle>(

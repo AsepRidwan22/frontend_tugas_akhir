@@ -162,6 +162,7 @@ ThemeData lightTheme = ThemeData(
     hintStyle: bSubtitle1.copyWith(color: bStroke),
     prefixIconColor: bPrimaryVariant1,
     suffixIconColor: bPrimaryVariant1,
+    border: InputBorder.none,
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
@@ -262,6 +263,7 @@ ThemeData darkTheme = ThemeData(
     prefixIconColor: bGrey,
     suffixIconColor: bGrey,
     focusColor: bError,
+    border: InputBorder.none,
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(

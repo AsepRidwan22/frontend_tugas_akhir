@@ -12,10 +12,13 @@ import 'package:frontend_tugas_akhir/domain/repositories/news_repository.dart';
 // import 'package:ditonton/domain/repositories/movie_repository.dart';
 import 'package:frontend_tugas_akhir/domain/repositories/user_repository.dart';
 import 'package:frontend_tugas_akhir/domain/usecases/get_news.dart';
+import 'package:frontend_tugas_akhir/domain/usecases/get_remember_me.dart';
 
 // import 'package:ditonton/domain/usecases/get_movie_detail.dart';
 import 'package:frontend_tugas_akhir/domain/usecases/login_user.dart';
 import 'package:frontend_tugas_akhir/domain/usecases/register.dart';
+import 'package:frontend_tugas_akhir/domain/usecases/set_remember_me.dart';
+import 'package:frontend_tugas_akhir/presentation/bloc/LoginPasien/login_pasien_bloc.dart';
 import 'package:frontend_tugas_akhir/presentation/provider/dokter_login_notifier.dart';
 
 // import 'package:ditonton/presentation/provider/movie_detail_notifier.dart';
@@ -51,6 +54,14 @@ void init() {
     ),
   );
 
+  locator.registerFactory(
+    () => LoginPasienBloc(
+      locator(),
+      locator(),
+      locator(),
+    ),
+  );
+
   // locator.registerFactory(
   //   () => NewsNotifier(
   //     getNews: locator(),
@@ -67,6 +78,8 @@ void init() {
   locator.registerLazySingleton(() => LoginDokters(locator()));
   locator.registerLazySingleton(() => RegisterUsers(locator()));
   locator.registerLazySingleton(() => GetNews(locator()));
+  locator.registerLazySingleton(() => SetRememberMe(locator()));
+  locator.registerLazySingleton(() => GetRememberMe(locator()));
 
   // locator.registerLazySingleton(() => RegisterUseCase(locator()));
 

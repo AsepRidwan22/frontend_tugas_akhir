@@ -9,6 +9,7 @@ abstract class LoginPasienEvent extends Equatable {
 
 class LoginFormEmailChanged extends LoginPasienEvent {
   final String email;
+
   const LoginFormEmailChanged({required this.email});
 
   @override
@@ -32,8 +33,39 @@ class LoginPasienRememberMeChanged extends LoginPasienEvent {
   List<Object> get props => [rememberMe];
 }
 
-class OnSaveRememberme extends LoginPasienEvent {
-  const OnSaveRememberme();
+// class OnSaveRememberme extends LoginPasienEvent {
+//   const OnSaveRememberme();
+//   @override
+//   List<Object> get props => [];
+// }
+
+class OnEmailSignIn extends LoginPasienEvent {
+  const OnEmailSignIn();
   @override
   List<Object> get props => [];
 }
+
+class LoginFormObsecurePasswordChanged extends LoginPasienEvent {
+  final bool obsecure;
+  const LoginFormObsecurePasswordChanged({required this.obsecure});
+
+  @override
+  List<Object> get props => [obsecure];
+}
+
+// class LoginFailure extends LoginPasienEvent {
+//   final String errorMessage;
+//   const LoginFailure({required this.errorMessage});
+
+//   @override
+//   List<Object> get props => [errorMessage];
+// }
+
+// class LoginFailureEvent extends LoginPasienEvent {
+//   final String errorMessage;
+
+//   LoginFailureEvent(this.errorMessage);
+
+//   @override
+//   List<Object> get props => [errorMessage];
+// }

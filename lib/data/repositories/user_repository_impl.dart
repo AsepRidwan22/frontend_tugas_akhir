@@ -17,12 +17,19 @@ class UserRepositoryImpl implements UserRepository {
   Future<Either<Failure, String>> loginUsers(
       String email, String password) async {
     try {
+      // print('masuk repository impl');
       final result = await remoteDataSource.loginUsers(email, password);
       return Right(result);
     } on ServerException {
-      return const Left(ServerFailure(''));
+      // print('server exception error');
+      return const Left(ServerFailure('Filed to connect to the server'));
     } on SocketException {
       return const Left(ConnectionFailure('Failed to connect to the network'));
+    } catch (e) {
+      //bagian ini saya rasa kurang tepat, karena tidak ada penanganan error yang spesifik
+      final errorMessage = e.toString().replaceAll('Exception:', '').trim();
+      return Left(ServerFailure(errorMessage));
+      // Kode lain untuk menangani kesalahan yang tidak terduga
     }
   }
 
@@ -33,7 +40,8 @@ class UserRepositoryImpl implements UserRepository {
       final result = await remoteDataSource.loginDokters(email, password);
       return Right(result);
     } on ServerException {
-      return const Left(ServerFailure(''));
+      print('server exception error');
+      return const Left(ServerFailure('Filed to connect to the server'));
     } on SocketException {
       return const Left(ConnectionFailure('Failed to connect to the network'));
     }
@@ -53,9 +61,22 @@ class UserRepositoryImpl implements UserRepository {
           await remoteDataSource.registerUsers(email, name, password);
       return Right(result);
     } on ServerException {
-      return const Left(ServerFailure(''));
+      print('server exception error');
+      return const Left(ServerFailure('Filed to connect to the server'));
     } on SocketException {
       return const Left(ConnectionFailure('Failed to connect to the network'));
     }
+  }
+
+  @override
+  Future<bool> getRememberMe() {
+    // TODO: implement getRememberMe
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> setRememberMe(bool value) {
+    // TODO: implement setRememberMe
+    throw UnimplementedError();
   }
 }
