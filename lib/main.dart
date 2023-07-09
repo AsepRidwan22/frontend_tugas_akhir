@@ -1,13 +1,20 @@
 import 'package:flutter/services.dart';
 // import 'package:frontend_tugas_akhir/common/constants.dart';
 import 'package:frontend_tugas_akhir/common/utils.dart';
+import 'package:frontend_tugas_akhir/presentation/bloc/Dashboard/dashboard_bloc.dart';
 import 'package:frontend_tugas_akhir/presentation/bloc/LoginPasien/login_pasien_bloc.dart';
 import 'package:frontend_tugas_akhir/presentation/bloc/News/news_bloc.dart';
+import 'package:frontend_tugas_akhir/presentation/bloc/Kesehatan/kesehatan_bloc.dart';
+import 'package:frontend_tugas_akhir/presentation/bloc/RegisterPasien/register_pasien_bloc.dart';
+// import 'package:frontend_tugas_akhir/presentation/pages/beranda_screen.dart';
 // import 'package:frontend_tugas_akhir/presentation/pages/berita_list.dart';
 // import 'package:frontend_tugas_akhir/presentation/pages/form_kesehatan_awal.dart';
-import 'package:frontend_tugas_akhir/presentation/pages/halaman_awal.dart';
-import 'package:frontend_tugas_akhir/presentation/pages/login_page_new.dart';
-import 'package:frontend_tugas_akhir/presentation/pages/register_page_new.dart';
+import 'package:frontend_tugas_akhir/presentation/pages/halaman_awal_screen.dart';
+import 'package:frontend_tugas_akhir/presentation/pages/login_screen.dart';
+import 'package:frontend_tugas_akhir/presentation/pages/register_screen.dart';
+// import 'package:frontend_tugas_akhir/presentation/pages/splah_screen.dart';
+// import 'package:frontend_tugas_akhir/presentation/pages/verification_screen.dart';
+// import 'package:frontend_tugas_akhir/presentation/pages/verifikasi_screen.dart';
 // import 'package:frontend_tugas_akhir/presentation/pages/ringkasan_kesehatan.dart';
 import 'package:frontend_tugas_akhir/presentation/provider/dokter_login_notifier.dart';
 import 'package:frontend_tugas_akhir/presentation/provider/pasien_login_notifier.dart';
@@ -36,6 +43,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor:
+          Colors.transparent, // Ubah dengan warna status bar yang diinginkan
+      statusBarBrightness: Brightness
+          .light, // Sesuaikan dengan brightness konten di halaman tersebut
+      statusBarIconBrightness:
+          Brightness.dark, // SSesuaikan dengan kecerahan ikon teks
+    ));
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -53,16 +69,25 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => di.locator<LoginPasienBloc>(),
         ),
+        BlocProvider(
+          create: (_) => di.locator<DashboardBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => di.locator<KesehatanBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => di.locator<RegisterPasienBloc>(),
+        ),
       ],
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: const SystemUiOverlayStyle(
-          statusBarColor: Colors
-              .transparent, // Ubah dengan warna status bar yang diinginkan
-          statusBarBrightness: Brightness
-              .light, // Sesuaikan dengan brightness konten di halaman tersebut
-          statusBarIconBrightness:
-              Brightness.dark, // Sesuaikan dengan kebutuhan ikon status bar
-        ),
+            // statusBarColor: Colors
+            //     .transparent, // Ubah dengan warna status bar yang diinginkan
+            // statusBarBrightness: Brightness
+            //     .light, // Sesuaikan dengan brightness konten di halaman tersebut
+            // statusBarIconBrightness:
+            //     Brightness.dark, // Sesuaikan dengan kebutuhan ikon status bar
+            ),
         child: MaterialApp(
           title: 'Flutter Demo',
           localizationsDelegates: const [
@@ -74,25 +99,26 @@ class MyApp extends StatelessWidget {
             Locale('id', 'ID'),
           ],
           theme: lightTheme,
-          home: const HalamanAwal(),
+          home: const HalamanAwalScreen(),
           navigatorObservers: [routeObserver],
           onGenerateRoute: (RouteSettings settings) {
             switch (settings.name) {
               case '/halaman_awal':
-                return MaterialPageRoute(builder: (_) => const HalamanAwal());
+                return MaterialPageRoute(
+                    builder: (_) => const HalamanAwalScreen());
               case '/pasien/login':
                 return MaterialPageRoute(
-                    builder: (_) => const LoginPageNew(
+                    builder: (_) => const LoginScreen(
                           role: 'Pasien',
                         ));
               case '/dokter/login':
                 return MaterialPageRoute(
-                    builder: (_) => const LoginPageNew(
+                    builder: (_) => const LoginScreen(
                           role: 'Dokter',
                         ));
               case '/register':
                 return MaterialPageRoute(
-                    builder: (_) => const RegisterPageNew());
+                    builder: (_) => const RegisterScreen());
               // case PopularMoviesPage.ROUTE_NAME:
               // return CupertinoPageRoute(builder: (_) => PopularMoviesPage());
               default:

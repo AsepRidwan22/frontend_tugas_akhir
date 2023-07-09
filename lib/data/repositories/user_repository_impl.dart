@@ -17,14 +17,15 @@ class UserRepositoryImpl implements UserRepository {
   Future<Either<Failure, String>> loginUsers(
       String email, String password) async {
     try {
-      // print('masuk repository impl');
+      print('masuk repository impl');
       final result = await remoteDataSource.loginUsers(email, password);
+      print('result: $result');
       return Right(result);
     } on ServerException {
       // print('server exception error');
       return const Left(ServerFailure('Filed to connect to the server'));
     } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ConnectionFailure('Gagal Menghubungkan ke Jaringan'));
     } catch (e) {
       //bagian ini saya rasa kurang tepat, karena tidak ada penanganan error yang spesifik
       final errorMessage = e.toString().replaceAll('Exception:', '').trim();
@@ -40,10 +41,9 @@ class UserRepositoryImpl implements UserRepository {
       final result = await remoteDataSource.loginDokters(email, password);
       return Right(result);
     } on ServerException {
-      print('server exception error');
       return const Left(ServerFailure('Filed to connect to the server'));
     } on SocketException {
-      return const Left(ConnectionFailure('Failed to connect to the network'));
+      return const Left(ConnectionFailure('Gagal Menghubungkan ke Jaringan'));
     }
   }
 
@@ -57,14 +57,21 @@ class UserRepositoryImpl implements UserRepository {
   Future<Either<Failure, String>> registerUsers(
       String email, String name, String password) async {
     try {
+      print('masuk repository impl');
       final result =
           await remoteDataSource.registerUsers(email, name, password);
+      print('result : $result');
       return Right(result);
     } on ServerException {
-      print('server exception error');
+      // print('server exception error');
       return const Left(ServerFailure('Filed to connect to the server'));
     } on SocketException {
       return const Left(ConnectionFailure('Failed to connect to the network'));
+    } catch (e) {
+      //bagian ini saya rasa kurang tepat, karena tidak ada penanganan error yang spesifik
+      final errorMessage = e.toString().replaceAll('Exception:', '').trim();
+      return Left(ServerFailure(errorMessage));
+      // Kode lain untuk menangani kesalahan yang tidak terduga
     }
   }
 
@@ -77,6 +84,30 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<bool> setRememberMe(bool value) {
     // TODO: implement setRememberMe
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> isDokter(bool value) {
+    // TODO: implement isDokter
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> isHaveProfile(String email) {
+    // TODO: implement isHaveProfile
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> isLogIn() {
+    // TODO: implement isLogIn
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> saveIsLogIn(bool value) {
+    // TODO: implement saveIsLogIn
     throw UnimplementedError();
   }
 }

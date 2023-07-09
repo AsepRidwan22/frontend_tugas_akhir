@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:frontend_tugas_akhir/data/models/news.dart';
+import 'package:frontend_tugas_akhir/data/models/model_news.dart';
 
 import 'package:frontend_tugas_akhir/domain/usecases/get_news.dart';
 

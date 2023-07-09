@@ -5,23 +5,27 @@ import 'package:frontend_tugas_akhir/theme/theme.dart';
 class CustomIconTextButton extends StatelessWidget {
   final double width;
   final String text;
-  String? icon;
-  double? height;
-  Color? bgColor;
-  Color? iconColor;
-  double? radiusLeft;
-  double? radiusRight;
-  double? radiusAll;
-  bool? isLoading;
+  final String? icon;
+  final double? height;
+  final Color? bgColor;
+  final Color? borederColor;
+  final Color? textColor;
+  final Color? iconColor;
+  final double? radiusLeft;
+  final double? radiusRight;
+  final double? radiusAll;
+  final bool? isLoading;
   final Function() onTap;
-  CustomIconTextButton(
+  const CustomIconTextButton(
       {Key? key,
       required this.width,
       required this.text,
       this.icon,
       this.height,
       this.bgColor,
+      this.textColor,
       this.iconColor,
+      this.borederColor,
       this.radiusLeft,
       this.radiusRight,
       this.radiusAll,
@@ -41,6 +45,11 @@ class CustomIconTextButton extends StatelessWidget {
           ),
           backgroundColor: bgColor ?? bPrimary,
           shape: RoundedRectangleBorder(
+              side: BorderSide(
+                color: borederColor ??
+                    Colors.transparent, // Set the color for the border
+                width: 2, // Set the width for the border
+              ),
               borderRadius: radiusAll != null
                   ? BorderRadius.circular(radiusAll!)
                   : radiusLeft != null
@@ -53,7 +62,8 @@ class CustomIconTextButton extends StatelessWidget {
           minimumSize: Size((width < 300) ? width : width, height ?? 60)),
       label: Text(
         isLoading != true ? text : '',
-        style: bButton1.copyWith(color: iconColor ?? bgForm),
+        // selectionColor: bTextSecondary,
+        style: bButton1.copyWith(color: textColor ?? bTextPrimary),
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
       ),

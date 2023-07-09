@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+// import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend_tugas_akhir/data/datasources/news_remote_data_source.dart';
-import 'package:frontend_tugas_akhir/data/models/news.dart';
+import 'package:frontend_tugas_akhir/data/models/model_news.dart';
 import 'package:frontend_tugas_akhir/presentation/component/custom_news_card.dart';
-import 'package:frontend_tugas_akhir/presentation/widgets/news_card_list.dart';
+// import 'package:frontend_tugas_akhir/presentation/widgets/news_card_list.dart';
 // import 'package:frontend_tugas_akhir/presentation/component/custom_app_bar.dart';
 // import 'package:frontend_tugas_akhir/presentation/component/custom_btn.dart';
 // import 'package:frontend_tugas_akhir/presentation/pages/login_page_new.dart';
-import 'package:frontend_tugas_akhir/theme/theme.dart';
-import 'package:intl/date_symbol_data_file.dart';
-import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
-import 'package:frontend_tugas_akhir/common/state_enum.dart';
+// import 'package:frontend_tugas_akhir/theme/theme.dart';
+// import 'package:intl/date_symbol_data_file.dart';
+// import 'package:provider/provider.dart';
+// import 'package:intl/intl.dart';
+// import 'package:frontend_tugas_akhir/common/state_enum.dart';
 
-class BeritaList extends StatefulWidget {
-  const BeritaList({super.key});
+class BeritaListScreen extends StatefulWidget {
+  const BeritaListScreen({super.key});
 
   @override
-  State<BeritaList> createState() => _BeritaListState();
+  State<BeritaListScreen> createState() => _BeritaListScreenState();
 }
 
-class _BeritaListState extends State<BeritaList> {
+class _BeritaListScreenState extends State<BeritaListScreen> {
   @override
   void initState() {
     super.initState();

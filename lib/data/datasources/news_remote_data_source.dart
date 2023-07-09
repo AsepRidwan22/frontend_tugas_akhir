@@ -4,7 +4,7 @@ import 'package:frontend_tugas_akhir/common/config.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:frontend_tugas_akhir/common/exception.dart';
-import 'package:frontend_tugas_akhir/data/models/news.dart';
+import 'package:frontend_tugas_akhir/data/models/model_news.dart';
 
 class NewsRemoteDataSourceImpl {
   final apiKey = Config().newsKey;

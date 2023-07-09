@@ -49,10 +49,11 @@ dependencies:
   bloc: ^8.1.1
   flutter_bloc: ^8.1.2
   loading_animation_widget: ^1.2.0+4
-  intl: ^0.17.0
-  logger: ^1.3.0
+  intl: ^0.18.1
   image_picker: ^0.8.7+5
   fluttertoast: ^8.2.2
+  page_transition: ^2.0.9
+  shared_preferences: ^2.1.2
 
 dev_dependencies:
   flutter_test:
@@ -96,7 +97,16 @@ flutter:
     - assets/exclamation-circle.svg
     - assets/check-circle.svg
     - assets/backgroundawal.svg
-
+    - assets/envelope.svg
+    - assets/icon/light/home.svg
+    - assets/icon/light/health.svg
+    - assets/icon/light/news.svg
+    - assets/icon/light/profile.svg
+    - assets/icon/fill/home.svg
+    - assets/icon/fill/health.svg
+    - assets/icon/fill/news.svg
+    - assets/icon/fill/profile.svg
+    - assets/prefixProfile.svg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

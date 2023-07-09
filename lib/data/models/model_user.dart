@@ -28,14 +28,6 @@ class UserModel extends Equatable {
     };
   }
 
-  // User toEntity() {
-  //   return User(
-  //     email: this.email,
-  //     name: this.name,
-  //     password: this.password,
-  //   );
-  // }
-
   User toEntity() {
     return User(
       email: email,

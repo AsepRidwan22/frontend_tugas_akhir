@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:frontend_tugas_akhir/data/datasources/news_remote_data_source.dart';
-import 'package:frontend_tugas_akhir/data/models/news.dart';
+import 'package:frontend_tugas_akhir/data/models/model_news.dart';
 import 'package:frontend_tugas_akhir/domain/repositories/news_repository.dart';
 import 'package:frontend_tugas_akhir/common/failure.dart';
 
@@ -15,14 +15,13 @@ class NewsRepositoryImpl implements NewsRepository {
 
   @override
   Future<Either<Failure, ArticlesResult>> getNews() async {
-    // TODO: implement getNews
     try {
       final result = await remoteDataSource.diabetesNewsId();
+      return Right(result);
     } on ServerException {
       return const Left(ServerFailure(''));
     } on SocketException {
       return const Left(ConnectionFailure('Failed to connect to the network'));
     }
-    throw UnimplementedError();
   }
 }

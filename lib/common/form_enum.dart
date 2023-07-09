@@ -3,4 +3,5 @@ enum FormStatusEnum {
   submittingForm,
   successSubmission,
   failedSubmission,
+  loadingSubmission,
 }

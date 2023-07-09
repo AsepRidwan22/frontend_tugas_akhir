@@ -53,6 +53,14 @@ class LoginFormObsecurePasswordChanged extends LoginPasienEvent {
   List<Object> get props => [obsecure];
 }
 
+class LoginFormIsLoading extends LoginPasienEvent {
+  final bool isLoading;
+  const LoginFormIsLoading({required this.isLoading});
+
+  @override
+  List<Object> get props => [isLoading];
+}
+
 // class LoginFailure extends LoginPasienEvent {
 //   final String errorMessage;
 //   const LoginFailure({required this.errorMessage});

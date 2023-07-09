@@ -37,38 +37,41 @@ class LoginPasienBloc extends Bloc<LoginPasienEvent, LoginPasienState> {
       ));
     });
 
+    on<LoginFormIsLoading>((event, emit) {
+      final newRememberMe = event.isLoading;
+
+      emit(state.copyWith(
+        isLoading: newRememberMe,
+      ));
+    });
+
     on<OnEmailSignIn>((event, emit) async {
       emit(state.copyWith(
-        formStatus: FormStatusEnum.submittingForm,
-      ));
+          formStatus: FormStatusEnum.submittingForm, isLoading: true));
 
-      try {
-        final result = await loginUsers.execute(
-          state.email,
-          state.password,
-        );
+      final result = await loginUsers.execute(
+        state.email,
+        state.password,
+      );
 
-        result.fold(
-          (failure) {
-            emit(state.copyWith(
-              formStatus: FormStatusEnum.failedSubmission,
-              message: failure.message,
-            ));
-          },
-          (data) {
-            emit(state.copyWith(
-              formStatus: FormStatusEnum.successSubmission,
-              message: data,
-            ));
-          },
-        );
-      } catch (e) {
-        final errorMessage = e.toString().replaceAll('Exception:', '').trim();
-        emit(state.copyWith(
-          formStatus: FormStatusEnum.failedSubmission,
-          message: errorMessage,
-        ));
-      }
+      result.fold(
+        (failure) {
+          print('Failure: gagal');
+          emit(state.copyWith(
+            formStatus: FormStatusEnum.failedSubmission,
+            message: failure.message,
+            isLoading: false,
+          ));
+        },
+        (data) {
+          print('Success: berhasil');
+          emit(state.copyWith(
+            formStatus: FormStatusEnum.successSubmission,
+            message: data,
+            isLoading: false,
+          ));
+        },
+      );
     });
 
     on<LoginFormObsecurePasswordChanged>((event, emit) {
@@ -77,26 +80,5 @@ class LoginPasienBloc extends Bloc<LoginPasienEvent, LoginPasienState> {
         obsecurePassword: newObsecure,
       ));
     });
-
-    // on<LoginFailure>((event, emit) {
-    //   final newMessage = event.errorMessage;
-
-    //   emit(state.copyWith(
-    //     formStatus: FormStatusEnum.failedSubmission,
-    //     message: newMessage,
-    //   ));
-    //   // Mengirim kejadian LoginFailureEvent
-    //   // add(LoginFailure(newMessage));
-    // });
-
-    // on<OnSaveRememberme>((event, emit) async {
-    //   final result = await setRememberMe.execute(state.rememberMe);
-
-    //   if (result) {
-    //     emit(state.copyWith(
-    //       rememberMe: state.rememberMe,
-    //     ));
-    //   }
-    // });
   }
 }

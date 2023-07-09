@@ -1,37 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:frontend_tugas_akhir/common/failure.dart';
-// import 'package:frontend_tugas_akhir/common/state_enum.dart';
+// import 'package:frontend_tugas_akhir/presentation/bloc/Dashboard/dashboard_bloc.dart';
 import 'package:frontend_tugas_akhir/presentation/bloc/LoginPasien/login_pasien_bloc.dart';
 import 'package:frontend_tugas_akhir/presentation/component/custom_app_bar.dart';
 import 'package:frontend_tugas_akhir/presentation/component/custom_btn.dart';
 import 'package:frontend_tugas_akhir/presentation/component/custom_login_email_text_field.dart';
 import 'package:frontend_tugas_akhir/presentation/component/custom_login_password_text_field.dart';
-// import 'package:frontend_tugas_akhir/presentation/component/custom_text_field.dart';
 import 'package:frontend_tugas_akhir/presentation/component/custom_toast.dart';
-import 'package:frontend_tugas_akhir/presentation/pages/register_page_new.dart';
-import 'package:frontend_tugas_akhir/presentation/pages/ringkasan_kesehatan.dart';
-// import 'package:frontend_tugas_akhir/presentation/provider/dokter_login_notifier.dart';
-// import 'package:frontend_tugas_akhir/presentation/provider/pasien_login_notifier.dart';
+import 'package:frontend_tugas_akhir/presentation/pages/dashboard_screen.dart';
+// import 'package:frontend_tugas_akhir/presentation/pages/register_screen.dart';
+import 'package:frontend_tugas_akhir/presentation/pages/verification_screen.dart';
 import 'package:frontend_tugas_akhir/theme/theme.dart';
-// import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import '../../common/form_enum.dart';
 
-class LoginPageNew extends StatefulWidget {
+class LoginScreen extends StatefulWidget {
   final String role;
-  const LoginPageNew({
+  const LoginScreen({
     Key? key,
     required this.role,
   }) : super(key: key);
 
   @override
-  State<LoginPageNew> createState() => _LoginPageNewState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginPageNewState extends State<LoginPageNew> {
+class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final toast = FToast();
 
@@ -74,6 +69,7 @@ class _LoginPageNewState extends State<LoginPageNew> {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: BlocListener<LoginPasienBloc, LoginPasienState>(
         listenWhen: (previous, current) {
           if (previous.formStatus == FormStatusEnum.submittingForm) {
@@ -84,42 +80,37 @@ class _LoginPageNewState extends State<LoginPageNew> {
         },
         listener: (context, state) {
           if (state.formStatus == FormStatusEnum.failedSubmission) {
-            // _showSnackBar(state.message, Colors.red);
-            // if (state.message is ServerFailure) {
-            //   toastError(state.message);
-            // }
             toastError(state.message);
           } else if (state.formStatus == FormStatusEnum.successSubmission) {
             Future(() {
-              // _showSnackBar(state.message, Colors.green);
               toastSuccess(state.message);
-              // print('sukses login');
             }).then((value) {
               // context.read<DashboardBloc>().add(const IsLogInSave(value: true));
-              Navigator.pushReplacement(
+              Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const RingkasanKesehatan(),
+                  builder: (context) => const DashboardScreen(),
                 ),
+                (route) => false,
               );
             });
           }
         },
-        child: Form(
-          key: _formKey,
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: SvgPicture.asset(
-                    "assets/backgroundawal.svg", // Ganti dengan path file SVG latar belakang yang Anda miliki
-                    fit: BoxFit.cover,
-                    width: screenSize.width * 1.5,
-                  ),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: SvgPicture.asset(
+                  "assets/backgroundawal.svg", // Ganti dengan path file SVG latar belakang yang Anda miliki
+                  fit: BoxFit.cover,
+                  width: screenSize.width * 1.5,
                 ),
               ),
-              CustomScrollView(
+            ),
+            Form(
+              key: _formKey,
+              child: CustomScrollView(
                 slivers: <Widget>[
                   CustomAppBar(
                     title: 'Login ${widget.role}',
@@ -130,8 +121,10 @@ class _LoginPageNewState extends State<LoginPageNew> {
                     },
                   ),
                   SliverPadding(
-                    padding:
-                        const EdgeInsets.only(left: 20, top: 80, bottom: 5),
+                    padding: EdgeInsets.only(
+                        left: 20,
+                        top: screenSize.height * 0.1,
+                        bottom: screenSize.height * 0.01),
                     sliver: SliverToBoxAdapter(
                       child: Text(
                         "Masuk",
@@ -144,7 +137,7 @@ class _LoginPageNewState extends State<LoginPageNew> {
                   _customEditForm(context, "Password",
                       const CustomLoginPasswordTextField()),
                   SliverPadding(
-                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     sliver: SliverToBoxAdapter(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -174,45 +167,34 @@ class _LoginPageNewState extends State<LoginPageNew> {
                     sliver: SliverToBoxAdapter(
                       child: Center(
                           child: widget.role == "Pasien"
-                              ? CustomIconTextButton(
-                                  radiusAll: 15,
-                                  bgColor: bPrimary,
-                                  width: screenSize.width,
-                                  text: "Masuk",
-                                  // isLoading: pasienLoginNotifier.isLoading,
-                                  // onTap: () => _loginPasien(pasienLoginNotifier),
-                                  onTap: () {
-                                    if (_formKey.currentState!.validate()) {
-                                      context
-                                          .read<LoginPasienBloc>()
-                                          .add(const OnEmailSignIn());
-                                      // });
-                                    } else {
-                                      toastError('Lengkapi data anda');
-                                    }
-                                  },
-                                )
+                              ? BlocBuilder<LoginPasienBloc, LoginPasienState>(
+                                  builder: (context, state) {
+                                  return CustomIconTextButton(
+                                    radiusAll: 15,
+                                    bgColor: bPrimary,
+                                    width: screenSize.width,
+                                    text: "Masuk",
+                                    isLoading: state.isLoading,
+                                    onTap: () {
+                                      if (_formKey.currentState!.validate()) {
+                                        context
+                                            .read<LoginPasienBloc>()
+                                            .add(const OnEmailSignIn());
+                                        // });
+                                      } else {
+                                        toastError('Lengkapi data anda');
+                                      }
+                                    },
+                                  );
+                                })
                               : CustomIconTextButton(
                                   radiusAll: 10,
                                   bgColor: bPrimary,
                                   width: screenSize.width,
                                   text: "Masuk",
-                                  // isLoading: pasienLoginNotifier.isLoading,
-                                  // onTap: () => _loginPasien(pasienLoginNotifier),
                                   onTap: () {
                                     if (_formKey.currentState!.validate()) {
-                                      context
-                                          .read<LoginPasienBloc>()
-                                          .add(const OnEmailSignIn());
-                                      // try {
-                                      //   context
-                                      //       .read<LoginPasienBloc>()
-                                      //       .add(const OnEmailSignIn());
-                                      // } catch (e) {
-                                      //   context.read<LoginPasienBloc>().add(
-                                      //       LoginFailure(
-                                      //           errorMessage: e.toString()));
-                                      // }
+                                      context.read<LoginPasienBloc>();
                                     } else {
                                       // Text wait localization
                                       // toastError(AppLocalizations.of(context)!.complateYourData);
@@ -221,47 +203,55 @@ class _LoginPageNewState extends State<LoginPageNew> {
                                 )),
                     ),
                   ),
-                  SliverPadding(
-                    padding:
-                        const EdgeInsets.only(left: 20, right: 20, top: 20),
-                    sliver: SliverToBoxAdapter(
-                      child: CustomIconTextButton(
-                        radiusAll: 15,
-                        bgColor: bSecondary,
-                        width: screenSize.width,
-                        text: "Daftar",
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const RegisterPageNew(),
+                  widget.role == 'Pasien'
+                      ? SliverPadding(
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, top: 20),
+                          sliver: SliverToBoxAdapter(
+                            child: CustomIconTextButton(
+                              radiusAll: 15,
+                              bgColor: bSecondary,
+                              width: screenSize.width,
+                              text: "Daftar",
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                        VerificationScreen(),
+                                    transitionsBuilder: (context, animation,
+                                        secondaryAnimation, child) {
+                                      return FadeTransition(
+                                        opacity: animation,
+                                        child: child,
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
                             ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
+                          ),
+                        )
+                      : const SliverToBoxAdapter(
+                          child: SizedBox(
+                            height: 0,
+                          ),
+                        ),
                 ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  // void _showSnackBar(String message, Color color) {
-  //   ScaffoldMessenger.of(context).showSnackBar(
-  //     SnackBar(
-  //       content: Text(message),
-  //       backgroundColor: color,
-  //     ),
-  //   );
-  // }
-
   Widget _customEditForm(BuildContext context, String title, Widget child) {
+    Size screenSize = MediaQuery.of(context).size;
     return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: EdgeInsets.symmetric(
+          horizontal: 20, vertical: screenSize.height * 0.01),
       sliver: SliverToBoxAdapter(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -291,18 +281,20 @@ class _LoginPageNewState extends State<LoginPageNew> {
               ),
           child: Row(
             children: <Widget>[
-              SizedBox(
-                height: 24.0,
-                width: 24.0,
-                child: Checkbox(
-                  value: state.rememberMe,
-                  onChanged: (value) => context.read<LoginPasienBloc>().add(
-                        LoginPasienRememberMeChanged(
-                          rememberMe: value!,
-                        ),
-                      ),
-                ),
-              ),
+              // SizedBox(
+              //   height: 24.0,
+              //   width: 24.0,
+              //   child: Checkbox(
+              //     // checkColor: Colors.transparent,
+              //     fillColor: ,
+              //     value: state.rememberMe,
+              //     onChanged: (value) => context.read<LoginPasienBloc>().add(
+              //           LoginPasienRememberMeChanged(
+              //             rememberMe: value!,
+              //           ),
+              //         ),
+              //   ),
+              // ),
               const SizedBox(
                 width: 10.0,
               ),
