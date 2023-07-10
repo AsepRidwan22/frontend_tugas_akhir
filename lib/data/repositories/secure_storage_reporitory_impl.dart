@@ -5,7 +5,8 @@ class SourceStorageReopsitoryImpl {
 
   SourceStorageReopsitoryImpl(this.secureStorageDataSource);
 
-  Future<String?> getToken() async {
-    return secureStorageDataSource.getToken();
+  Future<bool?> getToken() async {
+    final token = await secureStorageDataSource.getToken();
+    return token != '';
   }
 }

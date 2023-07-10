@@ -12,7 +12,6 @@ import 'package:frontend_tugas_akhir/presentation/pages/berita_list_screen.dart'
 import 'package:frontend_tugas_akhir/presentation/pages/halaman_awal_screen.dart';
 import 'package:frontend_tugas_akhir/presentation/pages/login_screen.dart';
 import 'package:frontend_tugas_akhir/presentation/pages/kesehatan_screen.dart';
-// import 'package:frontend_tugas_akhir/theme/theme.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -35,27 +34,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
     const HalamanAwalScreen(),
   ];
 
-  String? token; // Tambahkan variabel token
+  bool? token;
 
   @override
   void initState() {
     super.initState();
-    // Panggil metode untuk mengambil token saat inisialisasi
     getToken();
   }
 
   void getToken() async {
     token = await sourceStorageReopsitoryImpl.getToken();
-    setState(() {}); // Perbarui UI setelah token diperoleh
   }
 
   void _bottomNavIndexChange(int index) {
-    // bool isLogin = context.read<DashboardBloc>().state.isLogIn;
-    // bool isntLogin = context.read<DashboardBloc>().state.isntLogIn;
-    // bool isLogin = true;
-    print('token dalam ui : $token');
     if (index == 2) {
-      if (token != null) {
+      if (token == true) {
         context.read<DashboardBloc>().add(
               IndexBottomNavChange(
                 newIndex: index,
