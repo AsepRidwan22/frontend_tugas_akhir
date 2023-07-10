@@ -1,4 +1,4 @@
-package com.example.dins2
+package com.example.dins22
 
 import io.flutter.embedding.android.FlutterActivity
 

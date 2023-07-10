@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 // import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend_tugas_akhir/data/datasources/secure_storage_data_source.dart';
+import 'package:frontend_tugas_akhir/data/helper/shared_preferences_helper.dart';
+import 'package:frontend_tugas_akhir/data/repositories/secure_storage_reporitory_impl.dart';
 import 'package:frontend_tugas_akhir/presentation/bloc/Dashboard/dashboard_bloc.dart';
+import 'package:frontend_tugas_akhir/presentation/pages/beranda_screen.dart';
 import 'package:frontend_tugas_akhir/presentation/pages/berita_list_screen.dart';
 import 'package:frontend_tugas_akhir/presentation/pages/halaman_awal_screen.dart';
 import 'package:frontend_tugas_akhir/presentation/pages/login_screen.dart';
-import 'package:frontend_tugas_akhir/presentation/pages/ringkasan_kesehatan_screen.dart';
-import 'package:frontend_tugas_akhir/theme/theme.dart';
+import 'package:frontend_tugas_akhir/presentation/pages/kesehatan_screen.dart';
+// import 'package:frontend_tugas_akhir/theme/theme.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -20,19 +24,38 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  // User? user = FirebaseAuth.instance.currentUser; untuk current user
+  SourceStorageReopsitoryImpl sourceStorageReopsitoryImpl =
+      SourceStorageReopsitoryImpl(
+          SecureStorageDataSource(SecureStorageHelper()));
   final toast = FToast();
   final List<Widget> _listWidget = [
-    const RingkasanKesehatanScreen(),
+    const BerandaScreen(),
     const BeritaListScreen(),
-    const HalamanAwalScreen(),
+    const KesehatanScreen(),
     const HalamanAwalScreen(),
   ];
 
+  String? token; // Tambahkan variabel token
+
+  @override
+  void initState() {
+    super.initState();
+    // Panggil metode untuk mengambil token saat inisialisasi
+    getToken();
+  }
+
+  void getToken() async {
+    token = await sourceStorageReopsitoryImpl.getToken();
+    setState(() {}); // Perbarui UI setelah token diperoleh
+  }
+
   void _bottomNavIndexChange(int index) {
-    bool isLogin = context.read<DashboardBloc>().state.isLogIn;
+    // bool isLogin = context.read<DashboardBloc>().state.isLogIn;
+    // bool isntLogin = context.read<DashboardBloc>().state.isntLogIn;
+    // bool isLogin = true;
+    print('token dalam ui : $token');
     if (index == 2) {
-      if (isLogin) {
+      if (token != null) {
         context.read<DashboardBloc>().add(
               IndexBottomNavChange(
                 newIndex: index,
@@ -71,12 +94,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
               BottomNavigationBarItem(
                 icon: SvgPicture.asset(
                   "assets/icon/light/home.svg",
-                  color: bGrey,
+                  // color: bGrey,
                   height: 24.0,
                 ),
                 activeIcon: SvgPicture.asset(
                   "assets/icon/fill/home.svg",
-                  color: bPrimary,
+                  // color: bPrimary,
                   height: 24.0,
                 ),
                 // Wait Localization
@@ -85,12 +108,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
               BottomNavigationBarItem(
                 icon: SvgPicture.asset(
                   "assets/icon/light/news.svg",
-                  color: bGrey,
+                  // color: bGrey,
                   height: 24.0,
                 ),
                 activeIcon: SvgPicture.asset(
                   "assets/icon/fill/news.svg",
-                  color: bPrimary,
+                  // color: bPrimary,
                   height: 24.0,
                 ),
                 // Wait Localization
@@ -99,12 +122,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
               BottomNavigationBarItem(
                 icon: SvgPicture.asset(
                   "assets/icon/light/health.svg",
-                  color: bGrey,
+                  // color: bGrey,
                   height: 24.0,
                 ),
                 activeIcon: SvgPicture.asset(
                   "assets/icon/fill/health.svg",
-                  color: bPrimary,
+                  // color: bPrimary,
                   height: 24.0,
                 ),
                 // Wait Localization
@@ -113,12 +136,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
               BottomNavigationBarItem(
                 icon: SvgPicture.asset(
                   "assets/icon/light/profile.svg",
-                  color: bGrey,
+                  // color: bGrey,
                   height: 24.0,
                 ),
                 activeIcon: SvgPicture.asset(
                   "assets/icon/fill/profile.svg",
-                  color: bPrimary,
+                  // color: bPrimary,
                   height: 24.0,
                 ),
                 // Wait Localization

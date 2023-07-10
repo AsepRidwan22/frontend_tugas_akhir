@@ -9,16 +9,20 @@ import 'package:frontend_tugas_akhir/data/models/model_news.dart';
 class NewsRemoteDataSourceImpl {
   final apiKey = Config().newsKey;
   static const baseUrl = 'https://newsapi.org/v2';
-  static const query = 'kesehatan';
+  static const query = 'diabetes';
   static const sort = 'publishedAt';
   static const language = 'id';
 
   Future<ArticlesResult> diabetesNewsId() async {
-    final response = await http.get(Uri.parse(
-        "$baseUrl/everything?language=$language&q=$query&sortBy=$sort&apiKey=$apiKey"));
-    if (response.statusCode == 200) {
-      return ArticlesResult.fromJson(json.decode(response.body));
-    } else {
+    try {
+      final response = await http.get(Uri.parse(
+          "$baseUrl/everything?language=$language&q=$query&apiKey=$apiKey"));
+      if (response.statusCode == 200) {
+        return ArticlesResult.fromJson(json.decode(response.body));
+      } else {
+        throw ServerException();
+      }
+    } catch (e) {
       throw ServerException();
     }
   }

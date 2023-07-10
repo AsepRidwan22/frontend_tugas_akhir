@@ -58,8 +58,8 @@ class CustomNewsCard extends StatelessWidget {
                     );
                   },
                   errorWidget: (context, url, error) => SvgPicture.asset(
-                    "assets/icon/fill/exclamation-circle.svg",
-                    color: Colors.grey,
+                    "assets/exclamation-circle.svg",
+                    // color: Colors.grey,
                     height: 14.0,
                   ),
                   fit: BoxFit.cover,

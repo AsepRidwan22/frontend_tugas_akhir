@@ -1,73 +1,31 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class SharedPreferencesHelper {
-  static SharedPreferencesHelper? _sharedpreferencesHelper;
-  SharedPreferencesHelper._instance() {
-    _sharedpreferencesHelper = this;
+class SecureStorageHelper {
+  static SecureStorageHelper? _secureStorageHelper;
+  SecureStorageHelper._instance() {
+    _secureStorageHelper = this;
   }
 
-  factory SharedPreferencesHelper() =>
-      _sharedpreferencesHelper ?? SharedPreferencesHelper._instance();
+  factory SecureStorageHelper() =>
+      _secureStorageHelper ?? SecureStorageHelper._instance();
 
-  static SharedPreferences? _preferences;
+  static const FlutterSecureStorage _secureStorage = FlutterSecureStorage();
+  static const String _tokenKey = '';
 
-  Future<SharedPreferences?> get preferences async {
-    _preferences ??= await _initDb();
-    return _preferences;
-  }
-
-  static const String _isRememberPref = 'isRememberMe';
-  static const String _tokenPref = 'token';
-
-  Future<SharedPreferences> _initDb() async {
-    final pref = await SharedPreferences.getInstance();
-    return pref;
-  }
-
-  Future<bool> isRememberMe() async {
-    final pref = await preferences;
-    final value = pref?.getBool(_isRememberPref) ?? false;
-    return value;
-  }
-
-  Future<bool> setRememberMe(bool remember) async {
-    final pref = await preferences;
-    final value = await pref!.setBool(_isRememberPref, remember);
-    return value;
-  }
-
-  Future<String> getToken() async {
+  Future<String?> getToken() async {
     try {
-      final pref = await preferences;
-      final tokenz = pref?.getString(_tokenPref) ?? '';
-      print('get token: $tokenz');
-      return tokenz;
+      final token = await _secureStorage.read(key: _tokenKey);
+      return token;
     } catch (e) {
-      print('get token: $e');
-      return '';
+      return null;
     }
-    // final token = pref?.getString(_tokenPref);
-    // print('get token: $token');
-    // if (token != null) {
-    //   return token;
-    // } else {
-    //   throw Exception(
-    //       "Token is null"); // Atau gunakan nilai default sesuai kebutuhan
-    // }
   }
 
   Future<bool> setToken(String token) async {
-    print('token tersimpan: $token');
     try {
-      final pref = await preferences;
-      final value = await pref?.setString(_tokenPref, token);
-
-      print('token tersimpan: $value');
-      // final tokenz = pref?.getString(_tokenPref) ?? '';
-      // print('get token: $tokenz');
-      return value ?? false;
+      await _secureStorage.write(key: _tokenKey, value: token);
+      return true;
     } catch (e) {
-      print('token tersimpan: $e');
       return false;
     }
   }

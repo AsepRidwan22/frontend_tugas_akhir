@@ -6,12 +6,14 @@ import 'package:frontend_tugas_akhir/presentation/bloc/LoginPasien/login_pasien_
 import 'package:frontend_tugas_akhir/presentation/bloc/News/news_bloc.dart';
 import 'package:frontend_tugas_akhir/presentation/bloc/Kesehatan/kesehatan_bloc.dart';
 import 'package:frontend_tugas_akhir/presentation/bloc/RegisterPasien/register_pasien_bloc.dart';
+// import 'package:frontend_tugas_akhir/presentation/pages/berita_list_screen.dart';
 // import 'package:frontend_tugas_akhir/presentation/pages/beranda_screen.dart';
 // import 'package:frontend_tugas_akhir/presentation/pages/berita_list.dart';
 // import 'package:frontend_tugas_akhir/presentation/pages/form_kesehatan_awal.dart';
 import 'package:frontend_tugas_akhir/presentation/pages/halaman_awal_screen.dart';
 import 'package:frontend_tugas_akhir/presentation/pages/login_screen.dart';
 import 'package:frontend_tugas_akhir/presentation/pages/register_screen.dart';
+import 'package:frontend_tugas_akhir/presentation/pages/splash_screen.dart';
 // import 'package:frontend_tugas_akhir/presentation/pages/splah_screen.dart';
 // import 'package:frontend_tugas_akhir/presentation/pages/verification_screen.dart';
 // import 'package:frontend_tugas_akhir/presentation/pages/verifikasi_screen.dart';
@@ -94,12 +96,12 @@ class MyApp extends StatelessWidget {
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
           ],
-          supportedLocales: const [
-            Locale('en', 'US'), // Tambahkan lokalisasi yang ingin Anda dukung
-            Locale('id', 'ID'),
-          ],
+          // supportedLocales: const [
+          //   Locale('en', 'US'), // Tambahkan lokalisasi yang ingin Anda dukung
+          //   Locale('id', 'ID'),
+          // ],
           theme: lightTheme,
-          home: const HalamanAwalScreen(),
+          home: const SplashScreen(),
           navigatorObservers: [routeObserver],
           onGenerateRoute: (RouteSettings settings) {
             switch (settings.name) {

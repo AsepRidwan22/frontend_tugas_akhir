@@ -11,22 +11,21 @@ import 'package:frontend_tugas_akhir/data/models/model_kesehatan.dart';
 // import 'package:frontend_tugas_akhir/presentation/pages/login_page_new.dart';
 import 'package:frontend_tugas_akhir/theme/theme.dart';
 
-class RingkasanKesehatanScreen extends StatefulWidget {
-  const RingkasanKesehatanScreen({super.key});
+class KesehatanScreen extends StatefulWidget {
+  const KesehatanScreen({super.key});
 
   @override
-  State<RingkasanKesehatanScreen> createState() =>
-      _RingkasanKesehatanScreenState();
+  State<KesehatanScreen> createState() => _KesehatanScreenState();
 }
 
-class _RingkasanKesehatanScreenState extends State<RingkasanKesehatanScreen> {
-  bool _isRefreshing = false;
+class _KesehatanScreenState extends State<KesehatanScreen> {
+  // bool _isRefreshing = false;
   late final Future<ModelKesehatan> futureKesehatan;
 
   Future<void> _onRefresh() async {
     // Setel _isRefreshing menjadi true untuk menunjukkan bahwa sedang dilakukan refresh
     setState(() {
-      _isRefreshing = true;
+      // _isRefreshing = true;
     });
 
     // Lakukan tugas refresh di sini, seperti memuat ulang data
@@ -35,7 +34,7 @@ class _RingkasanKesehatanScreenState extends State<RingkasanKesehatanScreen> {
 
     // Setel _isRefreshing menjadi false untuk menunjukkan bahwa refresh telah selesai
     setState(() {
-      _isRefreshing = false;
+      // _isRefreshing = false;
     });
   }
 
@@ -128,9 +127,9 @@ class _RingkasanKesehatanScreenState extends State<RingkasanKesehatanScreen> {
                                 child: Column(
                                   children: [
                                     Text(
-                                      '${state.data!.status}', //status
+                                      state.data!.status,
                                       style:
-                                          textStyleBuilder(10, FontWeight.w600)
+                                          textStyleBuilder(14, FontWeight.w600)
                                               .copyWith(color: Colors.white),
                                     ),
                                     const SizedBox(
@@ -145,48 +144,48 @@ class _RingkasanKesehatanScreenState extends State<RingkasanKesehatanScreen> {
                                 ),
                               ),
                               const SizedBox(
-                                width: 10,
+                                width: 6,
                               ),
                               Expanded(
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  // mainAxisAlignment: MainAxisAlignment.start,
+                                  // crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     _customDataKondisiTubuh(
-                                        context, 'Tinggi Badan', '170', 'cm'),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    _customDataKondisiTubuh(
-                                        context, 'Berat Badan', '47', 'kg'),
+                                        context,
+                                        'Tinggi Badan',
+                                        '${state.data!.tinggiBadan}',
+                                        'cm'),
                                     const SizedBox(
                                       height: 10,
                                     ),
                                     _customDataKondisiTubuh(
                                         context,
-                                        'BMI',
-                                        '${state.data!.bmi?.toStringAsFixed(2)}',
+                                        'Berat Badan',
+                                        '${state.data!.beratBadan}',
                                         'kg'),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    _customDataKondisiTubuh(context, 'BMI',
+                                        '${state.data!.bmi}', 'kg'),
                                   ],
                                 ),
                               ),
-                              const SizedBox(
-                                width: 10,
-                              ),
                               Expanded(
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  // mainAxisAlignment: MainAxisAlignment.start,
+                                  // crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    _customDataKondisiTubuh(
-                                        context, 'Umur', '22', 'thn'), //umur
+                                    _customDataKondisiTubuh(context, 'Umur',
+                                        '${state.data!.umur}', 'thn'), //umur
                                     const SizedBox(
                                       height: 10,
                                     ),
                                     _customDataKondisiTubuh(
                                         context,
                                         'Berat Ideal',
-                                        '60-65',
+                                        '${state.data!.bbiMin} - ${state.data!.bbiMax}',
                                         'kg'), //bb min & max
                                     const SizedBox(
                                       height: 10,
@@ -194,7 +193,7 @@ class _RingkasanKesehatanScreenState extends State<RingkasanKesehatanScreen> {
                                     _customDataKondisiTubuh(
                                         context,
                                         'BMI Ideal',
-                                        '23-28',
+                                        '${state.data!.bmiMin}-${state.data!.bmiMax}',
                                         'kg'), //bmi min & max
                                   ],
                                 ),
@@ -223,18 +222,27 @@ class _RingkasanKesehatanScreenState extends State<RingkasanKesehatanScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            _customKebutuhanKalori(context,
-                                'assets/ringanIcon.svg', 'Ringan', '900'),
+                            _customKebutuhanKalori(
+                                context,
+                                'assets/ringanIcon.svg',
+                                'Ringan',
+                                '${state.data!.kaloriAktivitasRingan}'),
                             const SizedBox(
                               height: 10,
                             ),
-                            _customKebutuhanKalori(context,
-                                'assets/sedangIcon.svg', 'Ringan', '900'),
+                            _customKebutuhanKalori(
+                                context,
+                                'assets/sedangIcon.svg',
+                                'Ringan',
+                                '${state.data!.kaloriAktivitasSedang}'),
                             const SizedBox(
                               height: 10,
                             ),
-                            _customKebutuhanKalori(context,
-                                'assets/beratIcon.svg', 'Ringan', '900'),
+                            _customKebutuhanKalori(
+                                context,
+                                'assets/beratIcon.svg',
+                                'Ringan',
+                                '${state.data!.kaloriAktivitasBerat}'),
                           ],
                         ),
                       ),
@@ -301,7 +309,7 @@ class _RingkasanKesehatanScreenState extends State<RingkasanKesehatanScreen> {
                                 Row(
                                   children: [
                                     Text(
-                                      '120',
+                                      '${state.data!.tekananDarahSistolik}',
                                       style: bSubtitle1.copyWith(
                                           color: bGrey,
                                           fontWeight: FontWeight.bold),
@@ -361,7 +369,7 @@ class _RingkasanKesehatanScreenState extends State<RingkasanKesehatanScreen> {
                                 Row(
                                   children: [
                                     Text(
-                                      '120',
+                                      '${state.data!.tekananDarahDiastolik}',
                                       style: bSubtitle1.copyWith(
                                           color: bGrey,
                                           fontWeight: FontWeight.bold),
@@ -407,7 +415,6 @@ class _RingkasanKesehatanScreenState extends State<RingkasanKesehatanScreen> {
                               children: [
                                 SvgPicture.asset(
                                   "assets/iconHeart.svg",
-                                  color: bTextPrimary,
                                 ),
                                 const SizedBox(
                                   width: 10,
@@ -630,15 +637,15 @@ Widget _customKebutuhanKalori(
           style: bSubtitle1.copyWith(
               color: textFourth, fontWeight: FontWeight.bold)),
       Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             kalori,
             style:
-                bSubtitle1.copyWith(color: bGrey, fontWeight: FontWeight.bold),
+                bSubtitle2.copyWith(color: bGrey, fontWeight: FontWeight.bold),
           ),
           const SizedBox(
-            width: 2,
+            width: 5,
           ),
           Text(
             'kCal',

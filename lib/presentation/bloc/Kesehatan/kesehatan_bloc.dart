@@ -11,8 +11,7 @@ part 'kesehatan_state.dart';
 
 class KesehatanBloc extends Bloc<KesehatanEvent, KesehatanState> {
   final GetKesehatan getKesehatan;
-  // Kesehatan
-  // final RequestState
+
   KesehatanBloc({
     required this.getKesehatan,
   }) : super(KesehatanState.initial()) {

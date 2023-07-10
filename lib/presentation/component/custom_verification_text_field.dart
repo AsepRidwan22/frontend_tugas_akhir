@@ -30,7 +30,7 @@ class CustomVerificationTextField extends StatelessWidget {
           focusNode: focusNow,
           textInputAction: TextInputAction.next,
           keyboardType: TextInputType.number,
-          autofocus: true,
+          autofocus: false,
           textAlign: TextAlign.center,
           style: bHeading6.copyWith(
             color: Theme.of(context).colorScheme.tertiary,
